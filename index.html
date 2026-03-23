@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="dashboard">
+    <div class="dashboard-wrapper">
         <header>
-            <h1>DATA <span class="neon-cyan">SOURCES</span></h1>
-            <p id="sync-status">Scanning repository files...</p>
+            <h1>API <span class="neon-cyan">REGISTRY</span></h1>
+            <p id="status-text">Scanning collect1.txt through collect7.txt...</p>
         </header>
 
-        <div id="source-grid" class="grid">
+        <div id="source-grid" class="source-grid">
             </div>
 
-        <button onclick="updateDashboard()" class="refresh-btn">REFRESH DATA</button>
+        <button onclick="runRegistryScan()" class="scan-btn">RE-SCAN REPOSITORY</button>
     </div>
     <script src="script.js"></script>
 </body>
