@@ -1,72 +1,73 @@
 :root {
-    --bg-black: #080808;
-    --card-gray: #121214;
+    --bg-dark: #070708;
+    --card-bg: #121214;
     --neon-cyan: #00f2ff;
-    --text-white: #ffffff;
+    --text-primary: #ffffff;
     --text-dim: #6b7280;
 }
 
 body {
-    background-color: var(--bg-black);
-    color: var(--text-white);
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
     font-family: 'Inter', -apple-system, sans-serif;
     margin: 0;
     padding: 20px;
 }
 
-.dashboard-wrapper { max-width: 900px; margin: 0 auto; }
+.dashboard-container { max-width: 900px; margin: 0 auto; }
 
-header { margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 15px; }
+header { 
+    margin-bottom: 30px; 
+    border-bottom: 1px solid #222; 
+    padding-bottom: 15px; 
+}
+
+h1 { font-size: 1.4rem; letter-spacing: 1px; }
 .neon-cyan { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 242, 255, 0.4); }
-#status-text { font-size: 0.8rem; color: var(--text-dim); margin-top: 4px; }
+#sync-status { font-size: 0.8rem; color: var(--text-dim); margin-top: 5px; }
 
-.source-grid {
+.grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 16px;
 }
 
 .api-card {
-    background: var(--card-gray);
+    background: var(--card-bg);
     border: 1px solid #1f1f23;
     padding: 30px 20px;
-    border-radius: 6px;
+    border-radius: 8px;
     text-align: center;
     transition: 0.3s ease;
 }
 
-.api-card:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
-}
+.api-card:hover { border-color: var(--neon-cyan); }
 
 .api-title {
     display: block;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 800;
     color: var(--neon-cyan);
     text-transform: uppercase;
     margin-bottom: 12px;
 }
 
-.row-count {
+.data-count {
     font-size: 0.85rem;
     color: var(--text-dim);
     letter-spacing: 1px;
-    font-weight: 500;
 }
 
-.scan-btn {
+.refresh-btn {
     width: 100%;
     margin-top: 30px;
-    padding: 16px;
+    padding: 15px;
     background: transparent;
     border: 1px solid #333;
     color: var(--text-dim);
     font-weight: bold;
     cursor: pointer;
     border-radius: 4px;
-    letter-spacing: 1px;
 }
 
-.scan-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+.refresh-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); }
