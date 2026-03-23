@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-EnergyR6 | Dashboard</title>
+    <title>AI-EnergyR6 | API Summary</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="dashboard">
         <header>
-            <h1>ENERGY <span class="neon-text">COMMAND</span></h1>
-            <p id="status-bar">Monitoring 7 active data streams...</p>
+            <h1>DATA <span class="neon-cyan">SOURCES</span></h1>
+            <p id="sync-status">Scanning repository files...</p>
         </header>
 
-        <div id="summary-grid" class="grid">
+        <div id="source-grid" class="grid">
             </div>
 
-        <div class="actions">
-            <button onclick="refreshDashboard()" class="glow-button">MANUAL SYNC</button>
-        </div>
+        <button onclick="updateDashboard()" class="refresh-btn">REFRESH DATA</button>
     </div>
     <script src="script.js"></script>
 </body>
