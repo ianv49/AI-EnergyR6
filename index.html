@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-EnergyR6 | API Summary</title>
+    <title>AI-EnergyR6 | Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="dashboard-wrapper">
+    <div class="dashboard-container">
         <header>
-            <h1>API <span class="neon-cyan">REGISTRY</span></h1>
-            <p id="status-text">Scanning collect1.txt through collect7.txt...</p>
+            <h1>Summary of <span class="neon-cyan">web sensor data</span></h1>
+            <p id="sync-status">Checking collect1.txt to collect7.txt...</p>
         </header>
 
-        <div id="source-grid" class="source-grid">
+        <div id="api-grid" class="grid">
             </div>
 
-        <button onclick="runRegistryScan()" class="scan-btn">RE-SCAN REPOSITORY</button>
+        <button onclick="fetchApiRegistry()" class="refresh-btn">REFRESH DATA</button>
     </div>
     <script src="script.js"></script>
 </body>
