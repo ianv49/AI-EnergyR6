@@ -1,61 +1,72 @@
 :root {
-    --bg: #050505;
-    --surface: #121212;
-    --neon-blue: #00e5ff;
-    --neon-purple: #9d00ff;
+    --bg: #0a0a0b;
+    --card: #161618;
+    --neon: #00f2ff;
     --text: #ffffff;
-    --text-dim: #888;
+    --dim: #71717a;
 }
 
 body {
     background-color: var(--bg);
     color: var(--text);
-    font-family: 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
     padding: 20px;
+    display: flex;
+    justify-content: center;
 }
 
-.container { max-width: 1000px; margin: 0 auto; }
+.dashboard { width: 100%; max-width: 900px; }
 
-header { margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 20px; }
-
-h1 { font-size: 1.8rem; letter-spacing: 3px; }
-.neon-text { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+header { margin-bottom: 30px; border-left: 3px solid var(--neon); padding-left: 15px; }
+.neon-cyan { color: var(--neon); text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
+#sync-status { font-size: 0.8rem; color: var(--dim); margin-top: 5px; }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 15px;
 }
 
 .card {
-    background: var(--surface);
-    border: 1px solid #222;
+    background: var(--card);
+    border: 1px solid #27272a;
+    padding: 30px 20px;
     border-radius: 8px;
-    padding: 20px;
-    position: relative;
-    transition: 0.3s;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
 }
 
 .card:hover {
-    border-color: var(--neon-purple);
-    box-shadow: 0 0 15px rgba(157, 0, 255, 0.2);
+    transform: translateY(-3px);
+    border-color: var(--neon);
 }
 
-.card-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; }
-.card-value { font-size: 2.2rem; font-weight: bold; margin: 10px 0; font-family: monospace; }
-.card-meta { font-size: 0.75rem; color: var(--neon-blue); }
+.source-label {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--neon);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
 
-.glow-button {
-    background: transparent;
-    border: 1px solid var(--neon-blue);
-    color: var(--neon-blue);
-    padding: 12px 30px;
-    margin-top: 30px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
+.count-label {
+    font-size: 0.85rem;
+    color: var(--dim);
+    letter-spacing: 1px;
+}
+
+.refresh-btn {
     width: 100%;
+    margin-top: 30px;
+    padding: 15px;
+    background: transparent;
+    border: 1px solid var(--neon);
+    color: var(--neon);
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
-.glow-button:hover { background: var(--neon-blue); color: black; }
+.refresh-btn:hover { background: var(--neon); color: black; }
