@@ -1,0 +1,5 @@
+# Data collection last updated: 2026-03-12 19:37:23
+# Summary: solcast=1
+[solcast]
+id,timestamp,temperature,humidity,irradiance,wind_speed,source,wind_power_density,solar_energy_yield
+1,2026-03-01 00:00:00,26.0,75.0,200.0,2.5,solcast,9.57,0.20
