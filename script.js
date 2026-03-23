@@ -1,54 +1,54 @@
-// Updated list to use collect1.txt instead of collect.txt
-const apiFiles = [
+const apiSources = [
     'collect1.txt', 'collect2.txt', 'collect3.txt', 
     'collect4.txt', 'collect5.txt', 'collect6.txt', 'collect7.txt'
 ];
 
-async function runRegistryScan() {
-    const grid = document.getElementById('source-grid');
-    const status = document.getElementById('status-text');
-    grid.innerHTML = ''; // Clear existing cards
+async function fetchApiRegistry() {
+    const grid = document.getElementById('api-grid');
+    const status = document.getElementById('sync-status');
+    grid.innerHTML = ''; 
 
-    for (const fileName of apiFiles) {
+    for (const fileName of apiSources) {
         try {
             const response = await fetch(`${fileName}?v=${Date.now()}`);
             if (!response.ok) continue;
 
-            const content = await response.text();
-            const lines = content.trim().split('\n');
+            const text = await response.text();
+            const rows = text.trim().split('\n');
             
-            // Look for 'source' in the first 3 lines
-            let apiName = "UNKNOWN API";
-            for (let i = 0; i < Math.min(3, lines.length); i++) {
-                const currentLine = lines[i].toLowerCase();
-                if (currentLine.includes('source')) {
-                    // Extract value after : or =
-                    const segments = lines[i].split(/[:=]/);
-                    if (segments.length > 1) {
-                        apiName = segments[1].split(',')[0].trim().toUpperCase();
-                        break;
-                    }
+            // Logic to find the 'source' field in the CSV structure
+            // Sample Row: id,timestamp,temp,humi,irra,wind,SOURCE,wind_power,solar
+            // 'source' is at index 6 (the 7th item)
+            let detectedSource = "UNKNOWN API";
+
+            // We check the first row of data (index 0 or 1 if there's a header)
+            const dataRow = rows.length > 1 ? rows[1] : rows[0]; 
+            
+            if (dataRow && dataRow.includes(',')) {
+                const columns = dataRow.split(',');
+                if (columns.length >= 7) {
+                    detectedSource = columns[6].trim().replace(/_/g, ' ').toUpperCase();
                 }
             }
 
-            createApiCard(apiName, lines.length);
+            createCard(detectedSource, rows.length);
         } catch (err) {
-            console.error(`Could not read ${fileName}`);
+            console.warn(`Error reading ${fileName}`);
         }
     }
-    status.innerText = `SYNCED: ${new Date().toLocaleTimeString()}`;
+    status.innerText = `LAST SYNC: ${new Date().toLocaleTimeString()}`;
 }
 
-function createApiCard(name, count) {
-    const grid = document.getElementById('source-grid');
+function createCard(name, count) {
+    const grid = document.getElementById('api-grid');
     const card = document.createElement('div');
     card.className = 'api-card';
     card.innerHTML = `
         <span class="api-title">${name}</span>
-        <span class="row-count">${count} TOTAL RECORDS</span>
+        <span class="data-count">${count} DATA ROWS</span>
     `;
     grid.appendChild(card);
 }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', runRegistryScan);
+// Auto-run on load
+document.addEventListener('DOMContentLoaded', fetchApiRegistry);
