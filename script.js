@@ -1,56 +1,52 @@
-// Matches the files seen in your repository screenshot
-const collectFiles = [
+const targetFiles = [
     'collect1.txt', 'collect2.txt', 'collect3.txt', 
     'collect4.txt', 'collect5.txt', 'collect6.txt', 'collect7.txt'
 ];
 
-async function refreshDashboard() {
-    const grid = document.getElementById('summary-grid');
-    const status = document.getElementById('status-bar');
+async function updateDashboard() {
+    const grid = document.getElementById('source-grid');
+    const status = document.getElementById('sync-status');
+    grid.innerHTML = ''; // Clear for refresh
 
-    for (const fileName of collectFiles) {
+    for (const file of targetFiles) {
         try {
-            // Fetch with a timestamp to prevent browser caching
-            const response = await fetch(`${fileName}?t=${Date.now()}`);
-            if (!response.ok) throw new Error("Missing");
+            const response = await fetch(`${file}?nocache=${Date.now()}`);
+            if (!response.ok) continue;
 
             const text = await response.text();
             const lines = text.trim().split('\n');
             
-            // Extract the very last value (last line, last item if CSV)
-            const lastEntry = lines[lines.length - 1];
-            const displayValue = lastEntry.includes(',') ? lastEntry.split(',').pop() : lastEntry;
+            // Logic to find the Source Name (API Name)
+            // It looks for "source: NAME" or "source=NAME"
+            let apiName = "Unknown API";
+            const firstLine = lines[0] || "";
 
-            renderCard(fileName, displayValue, lines.length);
+            if (firstLine.toLowerCase().includes('source')) {
+                // Split by colon or equals, then clean up the result
+                const parts = firstLine.split(/[:=]/);
+                if (parts.length > 1) {
+                    apiName = parts[1].split(',')[0].trim();
+                }
+            }
+
+            createSourceCard(apiName, lines.length);
         } catch (err) {
-            renderCard(fileName, "OFFLINE", 0);
+            console.error(`Error reading ${file}:`, err);
         }
     }
-    status.innerText = `Last Updated: ${new Date().toLocaleTimeString()}`;
+    status.innerText = `SYNCED AT: ${new Date().toLocaleTimeString()}`;
 }
 
-function renderCard(name, value, total) {
-    const grid = document.getElementById('summary-grid');
-    const id = `card-${name.replace('.', '-')}`;
-    let card = document.getElementById(id);
-
-    if (!card) {
-        card = document.createElement('div');
-        card.id = id;
-        card.className = 'card';
-        grid.appendChild(card);
-    }
-
-    // Clean up file name for display (e.g., collect2.txt -> SENSOR 2)
-    const displayName = name === 'collect.txt' ? 'PRIMARY SENSOR' : `SENSOR ${name.match(/\d+/)}`;
-
+function createSourceCard(sourceName, count) {
+    const grid = document.getElementById('source-grid');
+    const card = document.createElement('div');
+    card.className = 'card';
     card.innerHTML = `
-        <div class="card-label">${displayName}</div>
-        <div class="card-value">${value}</div>
-        <div class="card-meta">DATA POINTS: ${total}</div>
+        <span class="source-label">${sourceName}</span>
+        <span class="count-label">${count} DATA POINTS</span>
     `;
+    grid.appendChild(card);
 }
 
-// Start immediately and auto-refresh every minute
-document.addEventListener('DOMContentLoaded', refreshDashboard);
-setInterval(refreshDashboard, 60000);
+// Initial initialization
+document.addEventListener('DOMContentLoaded', updateDashboard);
