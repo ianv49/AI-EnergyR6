@@ -1,8 +1,10 @@
 # AI-EnergyR6
 https://ianv49.github.io/AI-EnergyR6/
 
-📋 Project Phases
+This project develops a cross-platform application for predictive maintenance of renewable energy assets (wind turbines, solar panels, inverters, batteries). It uses IoT sensor data, external weather/solar APIs, and AI/ML models to forecast failures and optimize maintenance schedules.
 
+📋 Project Phases
+ 
 The project is organized into phases for systematic development. Below is the latest status of all phases with detailed sub-steps:
 
 Phase 1: Environment Setup ✅ Done
