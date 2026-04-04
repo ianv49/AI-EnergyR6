@@ -3,21 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-EnergyR6 | Dashboard</title>
+    <title>API Energy Data Summary</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+      /* Override for ML nav links - Solar green theme */
+      .header-nav-link {
+        color: #28a745 !important;
+        font-weight: bold;
+      }
+      .header-nav-link:hover {
+        color: #218838 !important;
+        text-decoration: underline;
+      }
+    </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <header>
-            <h1>Summary of <span class="neon-cyan">web sensor data</span></h1>
-            <p id="sync-status">Checking collect1.txt to collect7.txt...</p>
+    <div class="container">
+        <header class="header">
+            <h1>Energy Data Summary</h1>
+<p class="subtitle">Multi-API Data Analysis (Sim, NASA Power, OpenMeteo, Meteostat & WeatherBit)</p>
+            <nav class="header-nav">
+<a href="ml.html" class="header-nav-link">ML Table</a>
+                <a href="ml-chart.html" class="header-nav-link">Wind Chart</a>
+                <a href="ml-solar-chart.html" class="header-nav-link">Solar Chart</a>
+                <a href="ml-dual-chart.html" class="header-nav-link">Dual Chart</a>
+                <a href="ml-sim.html" class="header-nav-link">ML-Sim</a>
+                <a href="ml-nasa.html" class="header-nav-link">ML-NASA</a>
+            </nav>
+
+
         </header>
 
-        <div id="api-grid" class="grid">
+        <!-- Main Summary -->
+        <div class="main-summary">
+        <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-label">NASA Power API Records</div>
+                    <div class="summary-value" id="nasa-count">10,177</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">OpenMeteo API Records</div>
+                    <div class="summary-value" id="openmeteo-count">10,176</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Meteostat API Records</div>
+                    <div class="summary-value" id="meteostat-count">9,438</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">WeatherBit API Records</div>
+                    <div class="summary-value" id="weatherbit-count">10,905</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Total Real Records</div>
+                    <div class="summary-value" id="total-count">40,696</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Sim API Records</div>
+                    <div class="summary-value" id="sim-count">9,478</div>
+                </div>
             </div>
+        </div>
 
-        <button onclick="fetchApiRegistry()" class="refresh-btn">REFRESH DATA</button>
-    </div>
+        <!-- Tab Layout: Sidebar Navigation + Content -->
+        <div class="tab-layout">
+            <!-- Left Sidebar Tabs -->
+            <nav class="tabs-nav">
+                <button class="tab-button" data-tab="nasa-stats">NASA Stats</button>
+                <button class="tab-button" data-tab="openmeteo-stats">OpenMeteo Stats</button>
+                <button class="tab-button" data-tab="meteostat-stats">Meteostat Stats</button>
+                <button class="tab-button" data-tab="weatherbit-stats">WeatherBit Stats</button>
+                <button class="tab-button" data-tab="nasa-raw">NASA Raw</button>
+                <button class="tab-button" data-tab="openmeteo-raw">OpenMeteo Raw</button>
+                <button class="tab-button" data-tab="meteostat-raw">Meteostat Raw</button>
+                <button class="tab-button" data-tab="weatherbit-raw">WeatherBit Raw</button>
+                <button class="tab-button active" data-tab="sim-stats">Sim Stats</button>
+                <button class="tab-button" data-tab="sim-raw">Sim Raw</button>
+            </nav>
+
+            <!-- Tab Contents Area -->
+            <div class="tab-contents">
+                <!-- Sim API Stats Tab -->
+                <div class="tab-content active" id="sim-stats">
+            <h2>Sim API Statistics</h2>
+            <div class="stats-metrics" id="sim-stats-metrics">
+                <!-- Sample fallback if JS fails -->
+                <div class="metric-item">
+                    <div class="metric-label">Temperature (°C)</div>
+                    <div class="metric-values">
+                        <div class="metric-value"><div class="metric-value-label">Min</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Ave</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Max</div><div class="metric-value-number">--</div></div>
+                    </div>
+                </div>
+                <p style="color: #94a3b8; text-align: center; margin-top: 20px; font-size: 0.9rem;">Loading statistics...</p>
+            </div>
+        </div>
+
+        <!-- NASA Power Stats Tab -->
+        <div class="tab-content" id="nasa-stats">
+            <h2>NASA Power API Statistics</h2>
+            <div class="stats-metrics" id="nasa-stats-metrics">
+                <!-- Sample fallback if JS fails -->
+                <div class="metric-item">
+                    <div class="metric-label">Temperature (°C)</div>
+                    <div class="metric-values">
+                        <div class="metric-value"><div class="metric-value-label">Min</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Ave</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Max</div><div class="metric-value-number">--</div></div>
+                    </div>
+                </div>
+                <p style="color: #94a3b8; text-align: center; margin-top: 20px; font-size: 0.9rem;">Loading statistics...</p>
+            </div>
+        </div>
+
+        <!-- OpenMeteo Stats Tab -->
+        <div class="tab-content" id="openmeteo-stats">
+            <h2>OpenMeteo API Statistics</h2>
+            <div class="stats-metrics" id="openmeteo-stats-metrics">
+                <!-- Sample fallback if JS fails -->
+                <div class="metric-item">
+                    <div class="metric-label">Temperature (°C)</div>
+                    <div class="metric-values">
+                        <div class="metric-value"><div class="metric-value-label">Min</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Max</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Mean</div><div class="metric-value-number">--</div></div>
+                    </div>
+                </div>
+                <p style="color: #94a3b8; text-align: center; margin-top: 20px; font-size: 0.9rem;">Loading statistics...</p>
+            </div>
+        </div>
+
+        <!-- Meteostat Stats Tab -->
+        <div class="tab-content" id="meteostat-stats">
+            <h2>Meteostat API Statistics</h2>
+            <div class="stats-metrics" id="meteostat-stats-metrics">
+                <!-- Sample fallback if JS fails -->
+                <div class="metric-item">
+                    <div class="metric-label">Temperature (°C)</div>
+                    <div class="metric-values">
+                        <div class="metric-value"><div class="metric-value-label">Min</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Max</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Mean</div><div class="metric-value-number">--</div></div>
+                    </div>
+                </div>
+                <p style="color: #94a3b8; text-align: center; margin-top: 20px; font-size: 0.9rem;">Loading statistics...</p>
+            </div>
+        </div>
+
+        <!-- Sim Raw Data Tab -->
+        <div class="tab-content" id="sim-raw">
+            <h2>Sim API Raw Data</h2>
+            <iframe id="sim-raw-frame" class="raw-iframe" src="data/sim-api.txt"></iframe>
+        </div>
+
+        <!-- NASA Power Raw Data Tab -->
+        <div class="tab-content" id="nasa-raw">
+            <h2>NASA Power API Raw Data</h2>
+            <iframe id="nasa-raw-frame" class="raw-iframe" src="data/collect2.txt"></iframe>
+        </div>
+
+        <!-- OpenMeteo Raw Data Tab -->
+        <div class="tab-content" id="openmeteo-raw">
+            <h2>OpenMeteo API Raw Data</h2>
+            <iframe id="openmeteo-raw-frame" class="raw-iframe" src="data/collect3.txt"></iframe>
+        </div>
+
+        <!-- WeatherBit Stats Tab -->
+        <div class="tab-content" id="weatherbit-stats">
+            <h2>WeatherBit API Statistics</h2>
+            <div class="stats-metrics" id="weatherbit-stats-metrics">
+                <!-- Sample fallback if JS fails -->
+                <div class="metric-item">
+                    <div class="metric-label">Temperature (°C)</div>
+                    <div class="metric-values">
+                        <div class="metric-value"><div class="metric-value-label">Min</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Ave</div><div class="metric-value-number">--</div></div>
+                        <div class="metric-value"><div class="metric-value-label">Max</div><div class="metric-value-number">--</div></div>
+                    </div>
+                </div>
+                <p style="color: #94a3b8; text-align: center; margin-top: 20px; font-size: 0.9rem;">Loading statistics...</p>
+            </div>
+        </div>
+
+        <!-- WeatherBit Raw Data Tab -->
+        <div class="tab-content" id="weatherbit-raw">
+            <h2>WeatherBit API Raw Data</h2>
+            <iframe id="weatherbit-raw-frame" class="raw-iframe" src="data/collect7.txt"></iframe>
+        </div>
+
+        <!-- Meteostat Raw Data Tab -->
+        <div class="tab-content" id="meteostat-raw">
+            <h2>Meteostat API Raw Data</h2>
+            <iframe id="meteostat-raw-frame" class="raw-iframe" src="data/collect5.txt"></iframe>
+        </div>
+            </div><!-- end tab-contents -->
+        </div><!-- end tab-layout -->
+
     <script src="script.js"></script>
 </body>
 </html>
