@@ -49,10 +49,10 @@
 <body>
   <div class="container">
     <header class="header">
-        <h1>ML-Sim: Predict vs Actual</h1>
+<h1>RF-ML: Predict vs Actual</h1>
       <nav class="header-nav">
         <a href="index.html" class="header-nav-link">🏠 Main</a>
-        <a href="nasa-ml.html" class="header-nav-link">ML-NASA</a>
+<a href="rf-ml.html" class="header-nav-link">RF-ML</a>
       </nav>
     </header>
     <!-- CORE FILES USED BY SIM-ML HTML/JS: CSS=style.css, JS=sim-ml.js, TXT=data/sim-html.txt (fetch) | Purpose: Feb 21-28 2026 ML Predict (dashed) vs Actual (solid) wind/solar charts -->
@@ -60,7 +60,7 @@
     <div class="main-summary">
       <div class="summary-cards">
         <div class="summary-card" style="grid-column: 1 / -1;">
-          <div class="summary-label">ML Performance & Config</div><table style="width: 100%; border-collapse: collapse; font-size: 0.88em;">
+RF Performance & Config
             <thead>
           <tr><th style="text-align: right; padding: 8px 0; color: #94a3b8; font-weight: 600;">Metric</th><th style="text-align: center; padding: 8px 0; color: #94a3b8; font-weight: 600;">Current</th><th style="text-align: center; padding: 8px 0; color: #94a3b8; font-weight: 600;">Ideal</th><th style="text-align: left; padding: 8px 0; color: #94a3b8; font-weight: 600;">Meaning</th></tr>
             </thead>
@@ -111,7 +111,62 @@
     </div>
   </div>
 
-<script src="update-charts.js"></script>
+  <script>
+    const dates = ['Feb21','Feb22','Feb23','Feb24','Feb25','Feb26','Feb27','Feb28'];
+
+    // Predict Data-A ML
+    const predict_wind_avg = [4.10,3.74,4.59,4.10,3.74,4.59,4.10];
+    const predict_wind_min = [2.87,2.62,3.21,2.87,2.62,3.21,2.87];
+    const predict_wind_max = [5.33,4.86,5.96,5.33,4.86,5.96,5.33];
+    const predict_solar_avg = [1.02,0.93,1.15,1.02,0.93,1.15,1.02];
+    const predict_solar_min = [0.72,0.65,0.80,0.72,0.65,0.80,0.72];
+    const predict_solar_max = [1.33,1.21,1.49,1.33,1.21,1.49,1.33];
+
+    // Actual Data-B API
+    const actual_wind_avg = [3.46,3.47,3.60,3.69,3.66,3.58,3.63];
+    const actual_wind_min = [1.33,1.06,1.41,1.69,1.41,1.18,1.59];
+    const actual_wind_max = [5.77,5.70,5.83,5.98,5.69,5.58,5.74];
+    const actual_solar_avg = [199.03,192.29,198.93,206.88,222.22,203.06,210.91];
+    const actual_solar_min = [0.00,0.00,1.54,3.83,1.36,0.74,0.94];
+    const actual_solar_max = [655.56,724.87,664.40,702.84,812.53,748.61,708.62];
+
+    // Wind: simple solid colors Red Min, Green Avg, Blue Max
+    new Chart('combined_wind', {
+      type: 'line',
+      data: {
+        labels: dates,
+        datasets: [
+          // Predict
+          { label: 'Predict Avg (Data-A)', data: predict_wind_avg, borderColor: '#22c55e', borderWidth: 4, borderDash: [12,6], tension: 0.4 },
+          { label: 'Predict Min', data: predict_wind_min, borderColor: '#ef4444', borderWidth: 3, borderDash: [10,6], tension: 0.3 },
+          { label: 'Predict Max', data: predict_wind_max, borderColor: '#3b82f6', borderWidth: 3, borderDash: [10,6], tension: 0.3 },
+          // Actual
+          { label: 'Actual Avg (Data-B)', data: actual_wind_avg, borderColor: '#22c55e', borderWidth: 4, tension: 0.4, backgroundColor: 'rgba(34,197,94,0.15)', fill: true },
+          { label: 'Actual Min', data: actual_wind_min, borderColor: '#ef4444', borderWidth: 3, tension: 0.3 },
+          { label: 'Actual Max', data: actual_wind_max, borderColor: '#3b82f6', borderWidth: 3, tension: 0.3 }
+        ]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'Wind m/s' } } } }
+    });
+
+    // Solar: same simple colors, log scale
+    new Chart('combined_solar', {
+      type: 'line',
+      data: {
+        labels: dates,
+        datasets: [
+          // Predict
+          { label: 'Predict Avg (Data-A)', data: predict_solar_avg, borderColor: '#22c55e', borderWidth: 4, borderDash: [12,6], tension: 0.4 },
+          { label: 'Predict Min', data: predict_solar_min, borderColor: '#ef4444', borderWidth: 3, borderDash: [10,6], tension: 0.3 },
+          { label: 'Predict Max', data: predict_solar_max, borderColor: '#3b82f6', borderWidth: 3, borderDash: [10,6], tension: 0.3 },
+          // Actual
+          { label: 'Actual Avg (Data-B)', data: actual_solar_avg, borderColor: '#22c55e', borderWidth: 4, tension: 0.4, backgroundColor: 'rgba(34,197,94,0.15)', fill: true },
+          { label: 'Actual Min', data: actual_solar_min, borderColor: '#ef4444', borderWidth: 3, tension: 0.3 },
+          { label: 'Actual Max', data: actual_solar_max, borderColor: '#3b82f6', borderWidth: 3, tension: 0.3 }
+        ]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { type: 'logarithmic', min: 0.01, title: { display: true, text: 'Solar Irradiance (log scale)' } } } }
+    });
+  </script>
 </body>
 </html>
-

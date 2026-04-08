@@ -1,7 +1,11 @@
+// ml-sim.js - ML Predict vs Actual Baseline: Feb 21-28 2026 wind/solar charts.
+// CORE FILES: CSS=style.css (via HTML link), JS=ml-sim.js (this file), TXT=data/sim-api.txt (fetch for hist data), data/ml-sim-output.txt (write predictions).
+// Updated: Removed old sim-api.txt/Jan-Mar/Apr refs. Aligns with ml-sim.html hardcoded Feb21-28 data.
+
 async function loadSimData() {
   console.log('loadSimData START'); // DEBUG
   try {
-    const response = await fetch('data/sim-ml.txt');
+    const response = await fetch('data/sim-api.txt');
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const text = await response.text();
     const lines = text.trim().split('\n');
@@ -136,12 +140,12 @@ async function writeMLOutput(allStats) {
       body: csv
     });
     if (response.ok) {
-      console.log('✅ sim-ml.txt written successfully');
+      console.log('✅ ml-sim-output.txt written successfully');
     } else {
       console.warn('Write warning:', response.status);
     }
   } catch (error) {
-    console.error('Error writing sim-ml.txt:', error);
+    console.error('Error writing ml-sim-output.txt:', error);
   }
 }
 
