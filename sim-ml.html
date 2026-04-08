@@ -55,7 +55,7 @@
         <a href="nasa-ml.html" class="header-nav-link">ML-NASA</a>
       </nav>
     </header>
-    <!-- CORE FILES USED BY SIM-ML HTML/JS: CSS=style.css, JS=sim-ml.js, TXT=data/sim-html.txt (fetch) | Purpose: Feb 21-28 2026 ML Predict (dashed) vs Actual (solid) wind/solar charts -->
+    <!-- CORE FILES USED BY sim-ml HTML/JS: CSS=style.css, JS=sim-ml.js, TXT=data/sim-ml.txt | Purpose: Feb 21-28 2026 ML Predict (dashed) vs Actual (solid) wind/solar charts -->
 
     <div class="main-summary">
       <div class="summary-cards">
@@ -65,10 +65,10 @@
           <tr><th style="text-align: right; padding: 8px 0; color: #94a3b8; font-weight: 600;">Metric</th><th style="text-align: center; padding: 8px 0; color: #94a3b8; font-weight: 600;">Current</th><th style="text-align: center; padding: 8px 0; color: #94a3b8; font-weight: 600;">Ideal</th><th style="text-align: left; padding: 8px 0; color: #94a3b8; font-weight: 600;">Meaning</th></tr>
             </thead>
             <tbody>
-              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">MAE (wind-avg)</td><td style="text-align: center; color: #f59e0b; font-weight: bold;">0.553</td><td style="text-align: center; color: #10b981;"><0.5</td><td style="text-align: left;">Avg abs error (m/s)</td></tr>
-              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">RMSE</td><td style="text-align: center; color: #10b981; font-weight: bold;">0.641</td><td style="text-align: center; color: #10b981;"><0.7</td><td style="text-align: left;">RMS outliers (m/s)</td></tr>
-              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">R² Score</td><td style="text-align: center; color: #ef4444; font-weight: bold;">-59.25</td><td style="text-align: center; color: #10b981;">>0.7</td><td style="text-align: left;">Variance explained</td></tr>
-              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">Correlation</td><td style="text-align: center; color: #f59e0b; font-weight: bold;">0.104</td><td style="text-align: center; color: #10b981;">>0.8</td><td style="text-align: left;">Linear agreement</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">MAE (wind-avg)</td><td id="mae-val" style="text-align: center; color: #f59e0b; font-weight: bold;">1.900</td><td style="text-align: center; color: #10b981;"><0.5</td><td style="text-align: left;">Avg abs error (m/s)</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">RMSE</td><td id="rmse-val" style="text-align: center; color: #ef4444; font-weight: bold;">2.101</td><td style="text-align: center; color: #10b981;"><0.7</td><td style="text-align: left;">RMS outliers (m/s)</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">R² Score</td><td id="r2-val" style="text-align: center; color: #ef4444; font-weight: bold;">-6.332</td><td style="text-align: center; color: #10b981;">>0.7</td><td style="text-align: left;">Variance explained</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">Correlation</td><td id="corr-val" style="text-align: center; color: #ef4444; font-weight: bold;">-0.273</td><td style="text-align: center; color: #10b981;">>0.8</td><td style="text-align: left;">Linear agreement</td></tr>
 
 <tr style="border-top: 2px solid rgba(255,255,255,0.1); padding: 8px 0;">
   <td style="padding: 4px 0; font-weight: 600; width: 35%; text-align: right;">Model:</td>
@@ -79,7 +79,7 @@
   <td style="padding: 4px 0; width: 35%; text-align: right;">Training data:</td>
   <td style="text-align: left; color: #06b6d4; font-weight: 600; padding-left: 10px;" colspan="3">2025-01 to 2026-02-20 (13 months)</td>
  </tr>
-
+ 
  <tr style="padding: 4px 0 8px 0;">
   <td style="padding: 4px 0; width: 35%; text-align: right;">Predict data:</td>
   <td style="text-align: left; color: #06b6d4; font-weight: 600; padding-left: 10px;" colspan="3">Feb 21–28 2026 (8 days Min/Avg/Max)</td>
@@ -111,7 +111,62 @@
     </div>
   </div>
 
-<script src="update-charts.js"></script>
+  <script>
+    const dates = ['Feb21','Feb22','Feb23','Feb24','Feb25','Feb26','Feb27','Feb28'];
+
+    // Predict Data-A ML (Feb 21-28 2026) from sim-ml.txt
+    const predict_wind_avg = [5.35,5.26,5.92,6.00,5.84,5.66,5.37,5.28];
+    const predict_wind_min = [4.40,4.49,4.91,5.00,4.99,4.84,4.61,4.14];
+    const predict_wind_max = [6.13,5.93,6.97,7.10,6.64,6.37,6.04,6.09];
+    const predict_solar_avg = [0.240,0.239,0.248,0.248,0.235,0.233,0.228,0.232];
+    const predict_solar_min = [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000];
+    const predict_solar_max = [0.627,0.622,0.659,0.661,0.628,0.630,0.613,0.614];
+
+    // Actual Data-B API (Feb 21-28 2026) from sim-ml.txt
+    const actual_wind_avg = [8.21,6.94,6.89,8.26,6.41,7.25,7.13,8.79];
+    const actual_wind_min = [0.05,1.26,0.28,0.93,0.03,0.67,0.78,0.65];
+    const actual_wind_max = [14.16,12.31,14.10,14.59,13.24,14.99,14.77,14.83];
+    const actual_solar_avg = [0.302,0.346,0.285,0.295,0.199,0.285,0.262,0.313];
+    const actual_solar_min = [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000];
+    const actual_solar_max = [0.913,0.979,0.996,0.906,0.901,0.914,0.985,0.976];
+
+    // Wind: simple solid colors Red Min, Green Avg, Blue Max
+    new Chart('combined_wind', {
+      type: 'line',
+      data: {
+        labels: dates,
+        datasets: [
+          // Predict
+          { label: 'Predict Avg (Data-A)', data: predict_wind_avg, borderColor: '#22c55e', borderWidth: 4, borderDash: [12,6], tension: 0.4 },
+          { label: 'Predict Min', data: predict_wind_min, borderColor: '#ef4444', borderWidth: 3, borderDash: [10,6], tension: 0.3 },
+          { label: 'Predict Max', data: predict_wind_max, borderColor: '#3b82f6', borderWidth: 3, borderDash: [10,6], tension: 0.3 },
+          // Actual
+          { label: 'Actual Avg (Data-B)', data: actual_wind_avg, borderColor: '#22c55e', borderWidth: 4, tension: 0.4, backgroundColor: 'rgba(34,197,94,0.15)', fill: true },
+          { label: 'Actual Min', data: actual_wind_min, borderColor: '#ef4444', borderWidth: 3, tension: 0.3 },
+          { label: 'Actual Max', data: actual_wind_max, borderColor: '#3b82f6', borderWidth: 3, tension: 0.3 }
+        ]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'Wind m/s' } } } }
+    });
+
+    // Solar: same simple colors, log scale
+    new Chart('combined_solar', {
+      type: 'line',
+      data: {
+        labels: dates,
+        datasets: [
+          // Predict
+          { label: 'Predict Avg (Data-A)', data: predict_solar_avg, borderColor: '#22c55e', borderWidth: 4, borderDash: [12,6], tension: 0.4 },
+          { label: 'Predict Min', data: predict_solar_min, borderColor: '#ef4444', borderWidth: 3, borderDash: [10,6], tension: 0.3 },
+          { label: 'Predict Max', data: predict_solar_max, borderColor: '#3b82f6', borderWidth: 3, borderDash: [10,6], tension: 0.3 },
+          // Actual
+          { label: 'Actual Avg (Data-B)', data: actual_solar_avg, borderColor: '#22c55e', borderWidth: 4, tension: 0.4, backgroundColor: 'rgba(34,197,94,0.15)', fill: true },
+          { label: 'Actual Min', data: actual_solar_min, borderColor: '#ef4444', borderWidth: 3, tension: 0.3 },
+          { label: 'Actual Max', data: actual_solar_max, borderColor: '#3b82f6', borderWidth: 3, tension: 0.3 }
+        ]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { type: 'logarithmic', min: 0.01, title: { display: true, text: 'Solar Irradiance (log scale)' } } } }
+    });
+  </script>
 </body>
 </html>
-
