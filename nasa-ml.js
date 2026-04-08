@@ -1,7 +1,4 @@
 // nasa-ml.js - NASA ML Predict vs Actual: Feb 21-28 2026 wind/solar charts.
-// Fetches/parses data/nasa-ml.txt daily stats CSV, updates nasa-ml.html Chart.js wind/solar charts dynamically.
-// Only nasa-ml.js touched per instructions.
-
 async function loadNasaMLData() {
   console.log('NASA ML: Loading data/nasa-ml.txt...');
   try {
@@ -36,7 +33,6 @@ async function loadNasaMLData() {
 
     console.log(`Loaded: ${predictions.length} preds, ${actuals.length} actuals`);
 
-    // Parse metrics from end of file
     const metrics = {};
     const metricRegex = /MAE \(wind-avg\): ([\d.-]+)/i;
     const maeMatch = text.match(metricRegex);
@@ -73,7 +69,6 @@ function updateCharts({ predictions, actuals }) {
     return;
   }
 
-  // Extract arrays for Feb21-28 (slice first 8)
   const pWAvg = predictions.slice(0,8).map(d => d.wAvg);
   const pWMin = predictions.slice(0,8).map(d => d.wMin);
   const pWMax = predictions.slice(0,8).map(d => d.wMax);
@@ -90,22 +85,20 @@ function updateCharts({ predictions, actuals }) {
 
   const labels = ['Feb21','Feb22','Feb23','Feb24','Feb25','Feb26','Feb27','Feb28'];
 
-  // Update wind chart
   const windCtx = document.getElementById('combined_wind')?.getContext('2d');
   if (windCtx && Chart.getChart('combined_wind')) {
     const chart = Chart.getChart('combined_wind');
     chart.data.labels = labels;
-    chart.data.datasets[0].data = pWAvg; // Predict Avg
+    chart.data.datasets[0].data = pWAvg;
     chart.data.datasets[1].data = pWMin;
     chart.data.datasets[2].data = pWMax;
-    chart.data.datasets[3].data = aWAvg; // Actual Avg
+    chart.data.datasets[3].data = aWAvg;
     chart.data.datasets[4].data = aWMin;
     chart.data.datasets[5].data = aWMax;
     chart.update('active');
     console.log('Wind chart updated');
   }
 
-  // Update solar chart
   const solarCtx = document.getElementById('combined_solar')?.getContext('2d');
   if (solarCtx && Chart.getChart('combined_solar')) {
     const chart = Chart.getChart('combined_solar');
@@ -143,6 +136,5 @@ async function initNasaML() {
   console.log('✅ nasa-ml.js aligned - charts + metrics ready!');
 }
 
-// Run after DOM + charts load (delay for inline script)
+// Run after DOM + charts load
 window.addEventListener('load', initNasaML);
-
