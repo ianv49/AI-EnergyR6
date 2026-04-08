@@ -125,7 +125,7 @@ def aggregate_daily_actual(hourly_data):
 def main():
     nasa_data, _ = load_csv_skip_comments(nasa_file)
     
-    print("Training ML model using Jan 1 2025 - Feb 20 2026 NASA data...")
+    print("Training ML model using nasa-api.txt data...")
     wind_model, solar_model, scaler = train_ml_model(nasa_data)
     
     ml_daily = predict_daily_avgs(wind_model, solar_model, scaler)
