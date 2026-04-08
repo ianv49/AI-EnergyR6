@@ -55,7 +55,7 @@
         <a href="sim-ml.html" class="header-nav-link">ML-Sim</a>
       </nav>
     </header>
-    <!-- CORE FILES USED BY ML-SIM HTML/JS: CSS=style.css, JS=ml-sim.js, TXT=data/sim-api.txt (fetch), data/ml-sim-output.txt (write) | Purpose: Feb 21-28 2026 ML Predict (dashed) vs Actual (solid) wind/solar charts -->
+    <!-- CORE FILES USED BY nasa-ml HTML/JS: CSS=style.css, JS=nasa-ml.js, TXT=data/nasa-ml.txt (fetch) | Purpose: Feb 21-28 2026 ML Predict (dashed) vs Actual (solid) wind/solar charts -->
 
     <div class="main-summary">
       <div class="summary-cards">
@@ -65,16 +65,16 @@
           <tr><th style="text-align: right; padding: 8px 0; color: #94a3b8; font-weight: 600;">Metric</th><th style="text-align: center; padding: 8px 0; color: #94a3b8; font-weight: 600;">Current</th><th style="text-align: center; padding: 8px 0; color: #94a3b8; font-weight: 600;">Ideal</th><th style="text-align: left; padding: 8px 0; color: #94a3b8; font-weight: 600;">Meaning</th></tr>
             </thead>
             <tbody>
-<tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">MAE (wind-avg)</td><td id="mae-val" style="text-align: center; color: #f59e0b; font-weight: bold;">1.224</td><td style="text-align: center; color: #10b981;"><0.5</td><td style="text-align: left;">Avg abs error (m/s)</td></tr>
-<tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">RMSE</td><td id="rmse-val" style="text-align: center; color: #ef4444; font-weight: bold;">1.246</td><td style="text-align: center; color: #10b981;"><0.7</td><td style="text-align: left;">RMS outliers (m/s)</td></tr>
-<tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">R² Score</td><td id="r2-val" style="text-align: center; color: #ef4444; font-weight: bold;">-129.957</td><td style="text-align: center; color: #10b981;">>0.7</td><td style="text-align: left;">Variance explained</td></tr>
-<tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">Correlation</td><td id="corr-val" style="text-align: center; color: #ef4444; font-weight: bold;">-0.596</td><td style="text-align: center; color: #10b981;">>0.8</td><td style="text-align: left;">Linear agreement</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">MAE (wind-avg)</td><td id="mae-val" style="text-align: center; color: #f59e0b; font-weight: bold;">1.224</td><td style="text-align: center; color: #10b981;"><0.5</td><td style="text-align: left;">Avg abs error (m/s)</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">RMSE</td><td id="rmse-val" style="text-align: center; color: #ef4444; font-weight: bold;">1.246</td><td style="text-align: center; color: #10b981;"><0.7</td><td style="text-align: left;">RMS outliers (m/s)</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">R² Score</td><td id="r2-val" style="text-align: center; color: #ef4444; font-weight: bold;">-129.957</td><td style="text-align: center; color: #10b981;">>0.7</td><td style="text-align: left;">Variance explained</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">Correlation</td><td id="corr-val" style="text-align: center; color: #ef4444; font-weight: bold;">-0.596</td><td style="text-align: center; color: #10b981;">>0.8</td><td style="text-align: left;">Linear agreement</td></tr>
 
 <tr style="border-top: 2px solid rgba(255,255,255,0.1); padding: 8px 0;">
   <td style="padding: 4px 0; font-weight: 600; width: 35%; text-align: right;">Model:</td>
   <td style="text-align: left; font-weight: 600; color: #06b6d4; padding-left: 10px;" colspan="3">RandomForest</td>
-
  </tr>
+
  <tr style="padding: 4px 0;">
   <td style="padding: 4px 0; width: 35%; text-align: right;">Training data:</td>
   <td style="text-align: left; color: #06b6d4; font-weight: 600; padding-left: 10px;" colspan="3">2025-01 to 2026-02-20 (13 months)</td>
@@ -168,7 +168,6 @@
       options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { type: 'logarithmic', min: 0.01, title: { display: true, text: 'Solar Irradiance (log scale)' } } } }
     });
   </script>
-  <script src="nasa-ml.js"></script>
 </body>
 </html>
 
