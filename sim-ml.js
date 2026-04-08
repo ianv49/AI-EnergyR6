@@ -1,6 +1,6 @@
 // ml-sim.js - ML Predict vs Actual Baseline: Feb 21-28 2026 wind/solar charts.
 // CORE FILES: CSS=style.css (via HTML link), JS=ml-sim.js (this file), TXT=data/sim-api.txt (fetch for hist data), data/ml-sim-output.txt (write predictions).
-// Updated: Removed old collect1.txt/Jan-Mar/Apr refs. Aligns with ml-sim.html hardcoded Feb21-28 data.
+// Updated: Removed old sim-api.txt/Jan-Mar/Apr refs. Aligns with ml-sim.html hardcoded Feb21-28 data.
 
 async function loadSimData() {
   console.log('loadSimData START'); // DEBUG

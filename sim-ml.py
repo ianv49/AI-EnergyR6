@@ -41,8 +41,7 @@ Path('ml').mkdir(exist_ok=True)
 def prepare_training_set():
     """Merge collect*.txt -> ml/training_set.csv with ML features (from prepare_data.py)"""
     all_data = []
-    files = ['data/collect1.txt', 'data/collect2.txt', 'data/collect3.txt', 'data/collect4.txt', 
-             'data/collect5.txt', 'data/collect6.txt', 'data/collect7.txt']
+'data/sim-api.txt', 'data/collect2.txt', 'data/collect3.txt', 'data/collect4.txt',\n             'data/collect5.txt', 'data/collect6.txt', 'data/collect7.txt']
     
     for f in files:
         if os.path.exists(f):
@@ -174,7 +173,7 @@ def load_ml_predictions(ml_file='data/ml-sim-output.txt'):
     except:
         return pd.DataFrame()
 
-def load_actual_api(api_file='data/collect1.txt'):
+def load_actual_api(api_file='data/sim-api.txt'):
     """Load sim API actuals"""
     try:
         if not os.path.exists(api_file):
