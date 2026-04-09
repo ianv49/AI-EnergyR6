@@ -1,5 +1,5 @@
-# ML page output last updated: 2026-04-09 13:08:27
-# Summary: full-api actual = 8 | RF predict = 8
+# ML page output last updated: 2026-04-09 13:44:10
+# Summary: Training data = 40720 | full-api actual = 8 | RF predict = 8
 [full-api]
 
 # Data-A: RF-ML Predictions (Feb 21–28 2026)
