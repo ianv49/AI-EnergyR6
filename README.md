@@ -227,17 +227,26 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
 - Calculate averages/min/max/moving averages
 - Train ML model for forecasting (scikit-learn)
 - **ML Models Ranked for Wind/Solar Energy Time-Series Prediction:**
-  - **Rank#1: LSTM (Long Short-Term Memory)** → Best for sequential/time-series data like wind/solar; captures long-term dependencies.
-  - **Rank#2: GRU (Gated Recurrent Unit)** → Similar to LSTM but lighter and faster; efficient for limited compute.
+  - **Rank#1: LSTM (Long Short-Term Memory)** 
+    → Best for sequential/time-series data like wind/solar; captures long-term dependencies.
+  - **Rank#2: GRU (Gated Recurrent Unit)** ✅ Done
+    → Similar to LSTM but lighter and faster; efficient for limited compute.
   - **Rank#3: Random Forest Regressor** ✅ Done
     → Strong baseline for regression tasks; handles non-linearities and robust to outliers. 
-  - **Rank#4: XGBoost (Gradient Boosting)** → High accuracy for tabular data; requires careful hyperparameter tuning.
-  - **Rank#5: ARIMA / SARIMA** → Classic statistical models for univariate forecasting with seasonality; good baseline.
-  - **Rank#6: CNN (1D Convolutional Neural Network)** → Captures local temporal patterns; useful for short-term fluctuations.
-  - **Rank#7: Linear Regression with Lag Features** → Simple, interpretable baseline; add lag features (t-1, t-24) and time features.
-  - **Rank#8: SVR (Support Vector Regression)** → Effective for small datasets with kernel tricks; less scalable for large time-series.
-  - **Rank#9: KNN Regressor** → Instance-based learning; captures local patterns but not ideal for long time-series.
-  - **Rank#10: Naive Forecast (Persistence Model)** → Simplest baseline; predicts next value as last observed; useful for sanity checks.
+  - **Rank#4: XGBoost (Gradient Boosting)** 
+    → High accuracy for tabular data; requires careful hyperparameter tuning.
+  - **Rank#5: ARIMA / SARIMA** 
+    → Classic statistical models for univariate forecasting with seasonality; good baseline.
+  - **Rank#6: CNN (1D Convolutional Neural Network)** 
+    → Captures local temporal patterns; useful for short-term fluctuations.
+  - **Rank#7: Linear Regression with Lag Features** 
+    → Simple, interpretable baseline; add lag features (t-1, t-24) and time features.
+  - **Rank#8: SVR (Support Vector Regression)** 
+    → Effective for small datasets with kernel tricks; less scalable for large time-series.
+  - **Rank#9: KNN Regressor** 
+    → Instance-based learning; captures local patterns but not ideal for long time-series.
+  - **Rank#10: Naive Forecast (Persistence Model)** 
+    → Simplest baseline; predicts next value as last observed; useful for sanity checks.
   - Start simple: Linear Regression or Naive Forecast as baselines.
   - Progress to advanced: Random Forest/XGBoost, then LSTM/GRU for best accuracy.
   - Evaluate models using MAE/RMSE on held-out test data.
