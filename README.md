@@ -223,13 +223,14 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
 | Solar Energy Yield (kWh/m²/day) | DECIMAL(7,3) | Solar energy yield | Calculated |
 | Source | VARCHAR(50) | Data source identifier (open_meteo/nasa_power) | System |
 
-### Phase 10: Predictive Analytics ⏳ Pending
+### Phase 10: Predictive Analytics ⏳ Ongoing
 - Calculate averages/min/max/moving averages
 - Train ML model for forecasting (scikit-learn)
 - **ML Models Ranked for Wind/Solar Energy Time-Series Prediction:**
   - **Rank#1: LSTM (Long Short-Term Memory)** → Best for sequential/time-series data like wind/solar; captures long-term dependencies.
   - **Rank#2: GRU (Gated Recurrent Unit)** → Similar to LSTM but lighter and faster; efficient for limited compute.
-  - **Rank#3: Random Forest Regressor** → Strong baseline for regression tasks; handles non-linearities and robust to outliers.
+  - **Rank#3: Random Forest Regressor** ✅ Done
+    → Strong baseline for regression tasks; handles non-linearities and robust to outliers. 
   - **Rank#4: XGBoost (Gradient Boosting)** → High accuracy for tabular data; requires careful hyperparameter tuning.
   - **Rank#5: ARIMA / SARIMA** → Classic statistical models for univariate forecasting with seasonality; good baseline.
   - **Rank#6: CNN (1D Convolutional Neural Network)** → Captures local temporal patterns; useful for short-term fluctuations.
