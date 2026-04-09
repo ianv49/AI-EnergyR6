@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CNN-ML | Energy Data Summary</title>
+  <title>SVR-ML | Energy Data Summary</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -49,37 +49,37 @@
 <body>
   <div class="container">
     <header class="header">
-      <h1>CNN-ML: Predict vs Actual</h1>
+      <h1>SVR-ML: Predict vs Actual</h1>
       <nav class="header-nav">
         <a href="index.html" class="header-nav-link">🏠 Main</a>
-        <a href="rf-ml.html" class="header-nav-link">RF-ML</a>
+        <a href="nasa-ml.html" class="header-nav-link">NASA-ML</a>
+        <a href="sim-ml.html" class="header-nav-link">Sim-ML</a>
         <a href="ltsm-ml.html" class="header-nav-link">LSTM-ML</a>
         <a href="xg-ml.html" class="header-nav-link">XGB-ML</a>
         <a href="gr-ml.html" class="header-nav-link">GRU-ML</a>
-        <a href="nasa-ml.html" class="header-nav-link">NASA-ML</a>
-        <a href="sim-ml.html" class="header-nav-link">Sim-ML</a>
         <a href="ari-ml.html" class="header-nav-link">ARI-ML</a>
+        <a href="cnn-ml.html" class="header-nav-link">CNN-ML</a>
         <a href="lr-ml.html" class="header-nav-link">LR-ML</a>
-        <a href="svr-ml.html" class="header-nav-link">SVR-ML</a>
+        <a href="rf-ml.html" class="header-nav-link">RF-ML</a>
       </nav>
     </header>
 
     <div class="main-summary">
       <div class="summary-cards">
         <div class="summary-card" style="grid-column: 1 / -1;">
-          <div class="summary-label">CNN (1D Convolutional) Performance & Config</div><table style="width: 100%; border-collapse: collapse; font-size: 0.88em;">
+          <div class="summary-label">SVR Performance & Config</div><table style="width: 100%; border-collapse: collapse; font-size: 0.88em;">
             <thead>
           <tr><th style="text-align: right; padding: 8px 0; color: #94a3b8; font-weight: 600;">Metric</th><th style="text-align: center; padding: 8px 0; color: #94a3b8; font-weight: 600;">Wind</th><th style="text-align: center; padding: 8px 0; color: #94a3b8; font-weight: 600;">Solar</th><th style="text-align: center; padding: 8px 0; color: #94a3b8; font-weight: 600;">Ideal</th><th style="text-align: left; padding: 8px 0; color: #94a3b8; font-weight: 600;">Meaning</th></tr>
             </thead>
             <tbody>
-              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">MAE (ave)</td><td style="text-align: center; color: #f59e0b; font-weight: bold;">1.119</td><td style="text-align: center; color: #ef4444; font-weight: bold;">117.447</td><td style="text-align: center; color: #10b981;"><0.5</td><td style="text-align: left;">Avg abs error</td></tr>
-              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">RMSE</td><td style="text-align: center; color: #ef4444; font-weight: bold;">1.187</td><td style="text-align: center; color: #ef4444; font-weight: bold;">117.780</td><td style="text-align: center; color: #10b981;"><0.7</td><td style="text-align: left;">RMS outliers</td></tr>
-              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">R² Score</td><td style="text-align: center; color: #ef4444; font-weight: bold;">-6.384</td><td style="text-align: center; color: #ef4444; font-weight: bold;">-177.674</td><td style="text-align: center; color: #10b981;">>0.7</td><td style="text-align: left;">Variance explained</td></tr>
-              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">Correlation</td><td style="text-align: center; color: #f59e0b; font-weight: bold;">0.439</td><td style="text-align: center; color: #ef4444; font-weight: bold;">-0.108</td><td style="text-align: center; color: #10b981;">>0.8</td><td style="text-align: left;">Linear agreement</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">MAE (ave)</td><td style="text-align: center; color: #f59e0b; font-weight: bold;">0.578</td><td style="text-align: center; color: #ef4444; font-weight: bold;">120.964</td><td style="text-align: center; color: #10b981;"><0.5</td><td style="text-align: left;">Avg abs error</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">RMSE</td><td style="text-align: center; color: #ef4444; font-weight: bold;">0.695</td><td style="text-align: center; color: #ef4444; font-weight: bold;">121.278</td><td style="text-align: center; color: #10b981;"><0.7</td><td style="text-align: left;">RMS outliers</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">R² Score</td><td style="text-align: center; color: #ef4444; font-weight: bold;">-1.532</td><td style="text-align: center; color: #ef4444; font-weight: bold;">-188.445</td><td style="text-align: center; color: #10b981;">>0.7</td><td style="text-align: left;">Variance explained</td></tr>
+              <tr><td style="text-align: right; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">Correlation</td><td style="text-align: center; color: #f59e0b; font-weight: bold;">0.470</td><td style="text-align: center; color: #ef4444; font-weight: bold;">0.228</td><td style="text-align: center; color: #10b981;">>0.8</td><td style="text-align: left;">Linear agreement</td></tr>
 
 <tr style="border-top: 2px solid rgba(255,255,255,0.1); padding: 8px 0;">
   <td style="padding: 4px 0; font-weight: 600; width: 35%; text-align: right;">Model:</td>
-  <td style="text-align: left; font-weight: 600; color: #06b6d4; padding-left: 10px;" colspan="4">CNN (Conv1D: 32→64 filters, seq_len=7, epochs=50)</td>
+  <td style="text-align: left; font-weight: 600; color: #06b6d4; padding-left: 10px;" colspan="4">Support Vector Regression (SVR)</td>
  </tr>
 
  <tr style="padding: 4px 0;">
@@ -121,12 +121,12 @@
     const dates = ['Feb21','Feb22','Feb23','Feb24','Feb25','Feb26','Feb27','Feb28'];
 
     // Predict Data-A ML (Feb 21-28 2026)
-    const predict_wind_avg = [2.49,2.49,2.10,2.23,2.31,2.39,2.46,2.49];
-    const predict_wind_min = [2.49,2.49,2.10,2.23,2.31,2.39,2.46,2.49];
-    const predict_wind_max = [2.49,2.49,2.10,2.23,2.31,2.39,2.46,2.49];
-    const predict_solar_avg = [3.67,3.63,4.25,4.18,4.10,3.95,3.78,3.73];
-    const predict_solar_min = [3.67,3.63,4.25,4.18,4.10,3.95,3.78,3.73];
-    const predict_solar_max = [3.67,3.63,4.25,4.18,4.10,3.95,3.78,3.73];
+    const predict_wind_avg = [2.98,2.87,2.58,2.77,2.84,2.98,3.13,3.14];
+    const predict_wind_min = [1.81,1.77,1.74,1.93,1.89,1.92,2.02,2.05];
+    const predict_wind_max = [5.00,4.78,4.57,4.38,4.73,5.02,5.08,4.98];
+    const predict_solar_avg = [0.57,0.93,0.57,0.03,-0.27,-0.10,0.45,0.98];
+    const predict_solar_min = [-2.43,-1.64,-2.80,-3.37,-3.37,-2.78,-2.32,-2.25];
+    const predict_solar_max = [1.84,1.96,1.69,1.06,0.70,0.95,1.69,2.33];
 
     // Actual Data-B API (Feb 21-28 2026)
     const actual_wind_avg = [3.49,3.45,2.92,3.27,3.37,4.49,3.20,3.72];
