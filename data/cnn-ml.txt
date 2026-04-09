@@ -1,0 +1,38 @@
+# ML page output last updated: 2026-04-09 17:18:37
+# Summary: Training data = 40720 | full-api actual = 8 | CNN predict = 8
+[full-api]
+
+# Data-A: CNN Predictions (Feb 21–28 2026)
+id,timestamp,wind-min,wind-avg,wind-max,solar-min,solar-avg,solar-max,source
+1,2026-02-21,2.49,2.49,2.49,3.67,3.67,3.67,CNN-ML
+2,2026-02-22,2.49,2.49,2.49,3.63,3.63,3.63,CNN-ML
+3,2026-02-23,2.10,2.10,2.10,4.25,4.25,4.25,CNN-ML
+4,2026-02-24,2.23,2.23,2.23,4.18,4.18,4.18,CNN-ML
+5,2026-02-25,2.31,2.31,2.31,4.10,4.10,4.10,CNN-ML
+6,2026-02-26,2.39,2.39,2.39,3.95,3.95,3.95,CNN-ML
+7,2026-02-27,2.46,2.46,2.46,3.78,3.78,3.78,CNN-ML
+8,2026-02-28,2.49,2.49,2.49,3.73,3.73,3.73,CNN-ML
+
+# Data-B: REAL-API Power Daily Averages (Feb 21–28 2026)
+id,timestamp,wind-min,wind-avg,wind-max,solar-min,solar-avg,solar-max,source
+1,2026-02-21,1.00,3.49,16.80,0.00,106.23,772.00,full-API
+2,2026-02-22,0.69,3.45,11.40,0.00,120.53,833.00,full-API
+3,2026-02-23,0.40,2.92,11.90,0.00,123.72,833.00,full-API
+4,2026-02-24,1.03,3.27,10.10,0.00,109.76,796.00,full-API
+5,2026-02-25,0.40,3.37,11.70,0.00,120.31,849.00,full-API
+6,2026-02-26,1.00,4.49,20.50,0.00,126.95,883.00,full-API
+7,2026-02-27,0.30,3.20,13.10,0.00,129.98,896.00,full-API
+8,2026-02-28,0.40,3.72,14.40,0.00,133.39,897.00,full-API
+
+# Metrics: Prediction vs API Actual (Feb 21–28 2026)
+Wind Metrics:
+MAE (wind-avg): 1.119
+RMSE: 1.187
+R²: -6.384
+Correlation: 0.439
+
+Solar Metrics:
+MAE (solar-avg): 117.447
+RMSE: 117.780
+R²: -177.674
+Correlation: -0.108

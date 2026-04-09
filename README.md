@@ -235,9 +235,9 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
     → Strong baseline for regression tasks; handles non-linearities and robust to outliers. 
   - **Rank#4: XGBoost (Gradient Boosting)** ✅ Done
     → High accuracy for tabular data; requires careful hyperparameter tuning.
-  - **Rank#5: ARIMA / SARIMA** 
+  - **Rank#5: ARIMA / SARIMA** ✅ Done
     → Classic statistical models for univariate forecasting with seasonality; good baseline.
-  - **Rank#6: CNN (1D Convolutional Neural Network)** 
+  - **Rank#6: CNN (1D Convolutional Neural Network)** ✅ Done
     → Captures local temporal patterns; useful for short-term fluctuations.
   - **Rank#7: Linear Regression with Lag Features** 
     → Simple, interpretable baseline; add lag features (t-1, t-24) and time features.
