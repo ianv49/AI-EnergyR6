@@ -7,6 +7,21 @@ Instructions for AI: How to use this file (myNotes.txt) for logging:
 
 ================================================
 ..notes 2026-04-04;
+[a] Loaded data from 5 API files (sim-api.txt correctly excluded):
+  metstat-api.txt: 9,438 rows
+  nasa-api.txt: 10,177 rows
+  openmet-api.txt: 10,176 rows
+  tomrw-api.txt: 24 rows
+  wethrbit-api.txt: 10,905 rows
+  Total: 40,720 rows used for training
+[b] Output file rf-ml.txt generated with:
+  Data-A: 8 RF-ML predictions for Feb 21-28, 2026
+  Data-B: 176 actual API measurements
+  Metrics: MAE: 0.938, RMSE: 1.070, R²: -2.925, Correlation: 0.380
+  Date parsing fix applied to handle both ISO format (2026-03-19T09:00:00Z) and standard format (2026-03-19 09:00:00)
+
+================================================
+..notes 2026-04-04;
 [a] align files of nasa ml, put it in the list in log of apr3.
 [b] nasa-ml.txt already has result of nasa-ml.py.
   try to sill align the result/metric after rename of files.
