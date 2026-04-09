@@ -243,9 +243,9 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
     → Simple, interpretable baseline; add lag features (t-1, t-24) and time features.
   - **Rank#8: SVR (Support Vector Regression)** ✅ Done
     → Effective for small datasets with kernel tricks; less scalable for large time-series.
-  - **Rank#9: KNN Regressor** 
+  - **Rank#9: KNN Regressor** ✅ Done
     → Instance-based learning; captures local patterns but not ideal for long time-series.
-  - **Rank#10: Naive Forecast (Persistence Model)** 
+  - **Rank#10: Naive Forecast (Persistence Model)** ✅ Done
     → Simplest baseline; predicts next value as last observed; useful for sanity checks.
   - Start simple: Linear Regression or Naive Forecast as baselines.
   - Progress to advanced: Random Forest/XGBoost, then LSTM/GRU for best accuracy.
