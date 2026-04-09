@@ -1,0 +1,38 @@
+# ML page output last updated: 2026-04-09 16:41:12
+# Summary: Training data = 40720 | full-api actual = 8 | GRU predict = 8
+[full-api]
+
+# Data-A: GRU-ML Predictions (Feb 21–28 2026)
+id,timestamp,wind-min,wind-avg,wind-max,solar-min,solar-avg,solar-max,source
+1,2026-02-21,2.15,2.84,3.56,0.00,13.23,263.57,GRU-ML
+2,2026-02-22,2.38,2.71,3.01,0.68,58.34,260.51,GRU-ML
+3,2026-02-23,2.48,2.79,3.07,0.35,103.61,396.12,GRU-ML
+4,2026-02-24,2.47,2.79,3.11,0.00,11.97,63.01,GRU-ML
+5,2026-02-25,2.47,2.77,3.09,0.00,22.05,84.38,GRU-ML
+6,2026-02-26,2.45,2.75,3.05,0.00,28.34,108.03,GRU-ML
+7,2026-02-27,2.43,2.74,3.04,0.00,37.02,135.85,GRU-ML
+8,2026-02-28,2.40,2.73,3.03,0.38,47.29,184.86,GRU-ML
+
+# Data-B: REAL-API Power Daily Averages (Feb 21–28 2026)
+id,timestamp,wind-min,wind-avg,wind-max,solar-min,solar-avg,solar-max,source
+1,2026-02-21,1.00,3.49,16.80,0.00,106.23,772.00,full-API
+2,2026-02-22,0.69,3.45,11.40,0.00,120.53,833.00,full-API
+3,2026-02-23,0.40,2.92,11.90,0.00,123.72,833.00,full-API
+4,2026-02-24,1.03,3.27,10.10,0.00,109.76,796.00,full-API
+5,2026-02-25,0.40,3.37,11.70,0.00,120.31,849.00,full-API
+6,2026-02-26,1.00,4.49,20.50,0.00,126.95,883.00,full-API
+7,2026-02-27,0.30,3.20,13.10,0.00,129.98,896.00,full-API
+8,2026-02-28,0.40,3.72,14.40,0.00,133.39,897.00,full-API
+
+# Metrics: Prediction vs API Actual (Feb 21–28 2026)
+Wind Metrics:
+MAE (wind-avg): 0.724
+RMSE: 0.851
+R²: -2.798
+Correlation: -0.251
+
+Solar Metrics:
+MAE (solar-avg): 81.127
+RMSE: 85.086
+R²: -92.248
+Correlation: 0.442

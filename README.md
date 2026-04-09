@@ -227,13 +227,13 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
 - Calculate averages/min/max/moving averages
 - Train ML model for forecasting (scikit-learn)
 - **ML Models Ranked for Wind/Solar Energy Time-Series Prediction:**
-  - **Rank#1: LSTM (Long Short-Term Memory)** 
+  - **Rank#1: LSTM (Long Short-Term Memory)** ✅ Done
     → Best for sequential/time-series data like wind/solar; captures long-term dependencies.
   - **Rank#2: GRU (Gated Recurrent Unit)** ✅ Done
     → Similar to LSTM but lighter and faster; efficient for limited compute.
   - **Rank#3: Random Forest Regressor** ✅ Done
     → Strong baseline for regression tasks; handles non-linearities and robust to outliers. 
-  - **Rank#4: XGBoost (Gradient Boosting)** 
+  - **Rank#4: XGBoost (Gradient Boosting)** ✅ Done
     → High accuracy for tabular data; requires careful hyperparameter tuning.
   - **Rank#5: ARIMA / SARIMA** 
     → Classic statistical models for univariate forecasting with seasonality; good baseline.
