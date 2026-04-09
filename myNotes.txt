@@ -165,6 +165,42 @@ Instructions for AI: How to use this file (myNotes.txt) for logging:
     R²	-1.532	-188.445	🔴 Below baseline
     Correlation	0.470	0.228	🟠 Moderate/Low
   The SVR model successfully captures wind patterns (correlation 0.47) but solar predictions need refinement due to high daily variability (-0.22 correlation). Further hyperparameter tuning or feature engineering could improve accuracy.
+[i] KNN (K-Nearest Neighbors) Regressor ML 
+  Files Created: 
+  knn-ml.py (24 KB) - KNN Regressor machine learning model
+    Algorithm: K-Nearest Neighbors with distance-weighted predictions
+    Parameters: n_neighbors=5, weights='distance'
+    Training: 40,720 rows (13 months of API data)
+    Predictions: Feb 21-28 2026 daily Min/Avg/Max
+  knn-ml.txt (1.5 KB) - Output file with three sections:
+    Data-A: KNN predictions (8 days)
+    Data-B: Real API actuals (8 days)
+    Metrics: Wind & Solar performance measures
+  knn-ml.html (11 KB) - Interactive visualization
+    Hardcoded metrics table with color-coded performance
+    Two line charts comparing predictions vs actuals
+    Wind chart: Linear scale | Solar chart: Log scale
+  KNN Model Performance:
+    Metric	Wind	Solar	Status
+    MAE	0.826 m/s	110.125 W/m²	🔴 Underperforms
+    RMSE	0.922	111.611	🔴 Underperforms
+    R²	-3.460	-159.449	🔴 Very poor
+    Correlation	0.358	-0.006	🔴 Weak/None
+  Model Comparison:
+    Wind MAE Ranking (lower is better):
+      SVR-ML: 0.578 ⭐ Best
+      RF-ML: 0.683
+      KNN-ML: 0.826 ← Current
+    Solar MAE Ranking:
+      RF-ML: 75.733 ⭐ Best
+      KNN-ML: 110.125 ← Current
+      SVR-ML: 120.964
+  Key Findings:
+    Wind: KNN achieves moderate correlation (0.358) but underperforms all alternatives
+    Solar: KNN near-zero correlation (-0.006) - essentially no predictive power
+    Reason: KNN is instance-based learning, poor for time-series patterns
+    Recommendation: SVR and RF are superior; LSTM/GRU better for temporal data
+    The KNN implementation is mathematically complete but practically shows why this algorithm isn't suited for renewable energy forecasting. The model captures some local patterns but fails at capturing the temporal and global structures needed for accurate wind/solar prediction.
 
 ================================================
 ..notes 2026-04-04;

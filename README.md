@@ -241,7 +241,7 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
     → Captures local temporal patterns; useful for short-term fluctuations.
   - **Rank#7: Linear Regression with Lag Features** ✅ Done
     → Simple, interpretable baseline; add lag features (t-1, t-24) and time features.
-  - **Rank#8: SVR (Support Vector Regression)** 
+  - **Rank#8: SVR (Support Vector Regression)** ✅ Done
     → Effective for small datasets with kernel tricks; less scalable for large time-series.
   - **Rank#9: KNN Regressor** 
     → Instance-based learning; captures local patterns but not ideal for long time-series.
