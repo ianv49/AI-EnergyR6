@@ -6,7 +6,7 @@ Instructions for AI: How to use this file (myNotes.txt) for logging:
 - Separate logs with '================================================'
 
 ================================================
-..notes 2026-04-04;
+..notes 2026-04-09;
 [a] Loaded data from 5 API files (sim-api.txt correctly excluded):
   metstat-api.txt: 9,438 rows
   nasa-api.txt: 10,177 rows
@@ -106,6 +106,43 @@ Instructions for AI: How to use this file (myNotes.txt) for logging:
   Key Metrics (ARIMA):
     Wind: MAE 0.316, RMSE 0.440, Correlation 0.252 (good wind prediction!)
     Solar: MAE 14.487, RMSE 16.833, Correlation 0.686 (best solar correlation yet!)
+[g] Linear Regression with Lag Features ML Implementation (LR-ML)
+  [1] Created lr-ml.py (554 lines)
+    - Implements Linear Regression with lag features (t-1, t-24)
+    - 10 total features: 6 temporal/weather (day_of_year, hour, day_of_week, month, temperature, humidity) + 4 lag features
+    - Trains on 40,720 rows historical data (Jan 2025 - Feb 20, 2026)
+    - Generates 8-day forecasts (Feb 21-28, 2026) with min/avg/max values
+    - Uses StandardScaler for feature normalization before regression
+  [2] Generated lr-ml.txt (40 lines)
+    - Data-A: 8 LR-ML predictions with lag-based forecasting
+    - Data-B: 8 actual API measurement averages
+    - Performance Metrics:
+      * Wind: MAE=2.191, RMSE=2.331, R²=-27.485, Correlation=-0.006
+      * Solar: MAE=51.585, RMSE=54.190, R²=-36.824, Correlation=-0.728
+    - Note: Negative R² indicates linear model underperforms naive baseline; poor correlation suggests lag features insufficient for solar prediction
+  [3] Generated lr-ml.html (178 lines)
+    - Hardcoded all 8 metrics from lr-ml.txt into HTML table
+    - Chart.js visualizations for Wind & Solar predictions vs actual
+    - Interactive dashboard with min/avg/max line charts
+    - Full navigation bar linking to all 9 ML models (RF, LSTM, XGB, GRU, ARI, CNN, LR, NASA, SIM)
+  [4] Validated metric alignment
+    ✅ lr-ml.txt metrics match lr-ml.html hardcoded values exactly
+    ✅ All 8 metric values confirmed: MAE wind/solar, RMSE wind/solar, R² wind/solar, Corr wind/solar
+  [5] Navigation integration complete
+    ✅ Added LR-ML link to: rf-ml.html, ltsm-ml.html, xg-ml.html, gr-ml.html, ari-ml.html, cnn-ml.html, nasa-ml.html, sim-ml.html, index.html
+    ✅ All 9 HTML files now have complete 9-link navigation bar
+    ✅ Model suite now includes: NASA baseline, SIM baseline, RF, LSTM, XGB, GRU, ARIMA, CNN, LR (9 total)
+  [b] Model Comparison Notes:
+    - LR-ML uses simple linear regression with temporal lags; weak performance suggests non-linear patterns dominate
+    - Wind prediction better than solar (Corr: -0.006 vs -0.728) but still near random
+    - Negative R² across both targets indicates baseline (mean forecast) would perform better
+    - Suggests next models (SVR, KNN, or advanced ensembles) needed for improved accuracy
+  [c] Files created/modified:
+    - lr-ml.py: 554 lines, fully functional Linear Regression + lag features
+    - data/lr-ml.txt: 40 lines, Data-A/B + metrics
+    - lr-ml.html: 178 lines, hardcoded metrics + Chart.js visualization
+    - Updated 9 HTML nav bars: rf, ltsm, xg, gr, ari, cnn, nasa, sim, index
+  [z] Status: LR-ML fully integrated. Model suite now 9-model comprehensive comparison (Phase 10 ongoing).
 
 ================================================
 ..notes 2026-04-04;
@@ -264,3 +301,4 @@ Demo: start ml-chart.html → live responsive wind forecast charts
 - User screenshot: table populated (pre-fix), post-fix complete.
 
 [z] Summary: ML prediction page fully functional. Table displays real stats + preds. MLoutput.txt generated. Task complete 🎉 - Ready for next phase.
+
