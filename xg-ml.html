@@ -7,14 +7,46 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Exact index.html nav styling */
+    /* 3-Column header nav styling with active link highlight */
+    .header-nav {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px 20px;
+      list-style: none;
+      padding: 0;
+      margin: 15px 0;
+    }
     .header-nav-link {
       color: #28a745 !important;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+      line-height: 1.8;
+    }
+    .header-nav-link::before {
+      content: "•";
+      margin-right: 8px;
     }
     .header-nav-link:hover {
       color: #218838 !important;
       text-decoration: underline;
+    }
+    .header-nav-link.active {
+      color: #fbbf24 !important;
+      background-color: rgba(251, 191, 36, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-decoration: underline;
+    }
+    @media (max-width: 1200px) {
+      .header-nav {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .header-nav {
+        grid-template-columns: 1fr;
+      }
     }
     /* Page styling */
 .main-summary { margin: 50px 0; }
@@ -52,17 +84,18 @@
       <h1>XGB-ML: Predict vs Actual</h1>
       <nav class="header-nav">
         <a href="index.html" class="header-nav-link">🏠 Main</a>
-        <a href="rf-ml.html" class="header-nav-link">RF-ML</a>
-        <a href="nasa-ml.html" class="header-nav-link">NASA-ML</a>
-        <a href="sim-ml.html" class="header-nav-link">Sim-ML</a>
-        <a href="ltsm-ml.html" class="header-nav-link">LSTM-ML</a>
-        <a href="gr-ml.html" class="header-nav-link">GRU-ML</a>
-        <a href="ari-ml.html" class="header-nav-link">ARI-ML</a>
-        <a href="cnn-ml.html" class="header-nav-link">CNN-ML</a>
-        <a href="lr-ml.html" class="header-nav-link">LR-ML</a>
-        <a href="svr-ml.html" class="header-nav-link">SVR-ML</a>
-        <a href="knn-ml.html" class="header-nav-link">KNN-ML</a>
-        <a href="nf-ml.html" class="header-nav-link">NF-ML</a>
+        <a href="sim-ml.html" class="header-nav-link">ML-SIM</a>
+        <a href="nasa-ml.html" class="header-nav-link">ML-NASA</a>
+        <a href="rf-ml.html" class="header-nav-link">RF-ML[Random Forest]</a>
+        <a href="ltsm-ml.html" class="header-nav-link">LTSM-ML[Long Short-Term Memory]</a>
+        <a href="xg-ml.html" class="header-nav-link active">XGB-ML[Gradient Boosting]</a>
+        <a href="gr-ml.html" class="header-nav-link">GRU-ML[Gated Recurrent Unit]</a>
+        <a href="ari-ml.html" class="header-nav-link">ARI-ML[ARIMA]</a>
+        <a href="cnn-ml.html" class="header-nav-link">CNN-ML [Convolutional Neural Network]</a>
+        <a href="lr-ml.html" class="header-nav-link">LR-ML[Linear Regression]</a>
+        <a href="svr-ml.html" class="header-nav-link">SVR-ML[Support Vector Regression]</a>
+        <a href="knn-ml.html" class="header-nav-link">KNN-ML[K-Nearest Neighbors]</a>
+        <a href="nf-ml.html" class="header-nav-link">NF-ML[Naive Forecast]</a>
       </nav>
     </header>
 
