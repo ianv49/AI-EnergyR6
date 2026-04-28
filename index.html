@@ -7,13 +7,38 @@
     <link rel="stylesheet" href="style.css">
     <style>
       /* Override for ML nav links - Solar green theme */
+      .header-nav {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px 20px;
+        list-style: none;
+        padding: 0;
+        margin: 15px 0;
+      }
       .header-nav-link {
         color: #28a745 !important;
         font-weight: bold;
+        display: flex;
+        align-items: center;
+        line-height: 1.8;
+      }
+      .header-nav-link::before {
+        content: "•";
+        margin-right: 8px;
       }
       .header-nav-link:hover {
         color: #218838 !important;
         text-decoration: underline;
+      }
+      @media (max-width: 1200px) {
+        .header-nav {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 768px) {
+        .header-nav {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
 </head>
