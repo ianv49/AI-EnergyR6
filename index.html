@@ -97,6 +97,7 @@
         <div class="tab-layout">
             <!-- Left Sidebar Tabs -->
             <nav class="tabs-nav">
+                <button class="tab-button active" data-tab="ml-results">ML Results</button>
                 <button class="tab-button" data-tab="nasa-stats">NASA Stats</button>
                 <button class="tab-button" data-tab="openmeteo-stats">OpenMeteo Stats</button>
                 <button class="tab-button" data-tab="meteostat-stats">Meteostat Stats</button>
@@ -105,16 +106,15 @@
                 <button class="tab-button" data-tab="openmeteo-raw">OpenMeteo Raw</button>
                 <button class="tab-button" data-tab="meteostat-raw">Meteostat Raw</button>
                 <button class="tab-button" data-tab="weatherbit-raw">WeatherBit Raw</button>
-                <button class="tab-button active" data-tab="sim-stats">Sim Stats</button>
-                <button class="tab-button" data-tab="sim-raw">Sim Raw</button>
                 <hr style="margin: 10px 0; border: none; border-top: 1px solid #334155;">
-                <button class="tab-button" data-tab="ml-comparison">ML Comparison</button>
+                <button class="tab-button" data-tab="sim-stats">Sim Stats</button>
+                <button class="tab-button" data-tab="sim-raw">Sim Raw</button>
             </nav>
 
             <!-- Tab Contents Area -->
             <div class="tab-contents">
                 <!-- Sim API Stats Tab -->
-                <div class="tab-content active" id="sim-stats">
+                <div class="tab-content" id="sim-stats">
             <h2>Sim API Statistics</h2>
             <div class="stats-metrics" id="sim-stats-metrics">
                 <!-- Sample fallback if JS fails -->
@@ -228,9 +228,9 @@
             <iframe id="meteostat-raw-frame" class="raw-iframe" src="data/metstat-api.txt"></iframe>
         </div>
 
-        <!-- ML Comparison Stats Tab -->
-        <div class="tab-content" id="ml-comparison">
-            <h2>ML Models Comparison</h2>
+        <!-- ML Results Tab -->
+        <div class="tab-content active" id="ml-results">
+            <h2>ML Results</h2>
             <div style="overflow-x: auto; margin-top: 20px;">
                 <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; color: #e2e8f0;">
                     <thead>
@@ -258,101 +258,11 @@
                     </thead>
                     <tbody>
                         <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">ML-SIM</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">ML-NASA</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">RF-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">LTSM-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">XGB-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">GRU-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
                             <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">ARI-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">14.487</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">16.833</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-2.650</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">0.686</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
@@ -364,25 +274,10 @@
                         </tr>
                         <tr style="border-bottom: 1px solid #334155;">
                             <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">CNN-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">LR-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">117.447</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">117.780</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-177.674</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-0.108</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
@@ -393,11 +288,11 @@
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">SVR-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">GRU-ML</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">81.127</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">85.086</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-92.248</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">0.442</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
@@ -409,10 +304,40 @@
                         </tr>
                         <tr style="border-bottom: 1px solid #334155;">
                             <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">KNN-ML</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">110.125</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">111.611</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-159.449</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-0.006</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #334155;">
+                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">LR-ML</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">51.585</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">54.190</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-36.824</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-0.728</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #334155;">
+                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">LTSM-ML</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">104.750</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">106.748</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-145.770</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-0.692</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
@@ -424,10 +349,55 @@
                         </tr>
                         <tr style="border-bottom: 1px solid #334155;">
                             <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">NF-ML</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">115.279</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">115.615</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-171.167</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">0.000</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #334155;">
+                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">RF-ML</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">75.733</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">76.680</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-74.734</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-0.220</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #334155;">
+                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">SVR-ML</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">120.964</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">121.278</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-188.445</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">0.228</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #334155;">
+                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">XGB-ML</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">55.715</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">56.626</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-40.300</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">-0.631</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
                             <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
@@ -442,188 +412,6 @@
             </div>
             <p style="color: #94a3b8; text-align: center; margin-top: 20px; font-size: 0.9rem;">Loading ML model statistics...</p>
         </div>
-                    <tbody>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">ML-SIM</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">ML-NASA</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">RF-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">LTSM-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">XGB-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">GRU-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">ARI-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">CNN-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">LR-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">SVR-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">KNN-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #334155;">
-                            <td style="padding: 10px; border: 1px solid #334155; font-weight: 600;">NF-ML</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                            <td style="padding: 10px; text-align: center; border: 1px solid #334155;">--</td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
             <p style="color: #94a3b8; text-align: center; margin-top: 20px; font-size: 0.9rem;">Loading ML model statistics...</p>
