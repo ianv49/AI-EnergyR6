@@ -521,6 +521,21 @@
                         <option value="data/openmeteo_2025_01_january.csv">OpenMeteo - January 2025</option>
                         <option value="data/openmeteo_2025_02_february.csv">OpenMeteo - February 2025</option>
                         <option value="data/openmeteo_2025_03_march.csv">OpenMeteo - March 2025</option>
+                        <option value="data/nasa_2025_02_february.csv">NASA - February 2025</option>
+                        <option value="data/nasa_2025_03_march.csv">NASA - March 2025</option>
+                        <option value="data/nasa_2025_04_april.csv">NASA - April 2025</option>
+                        <option value="data/nasa_2025_05_may.csv">NASA - May 2025</option>
+                        <option value="data/nasa_2025_06_june.csv">NASA - June 2025</option>
+                        <option value="data/nasa_2025_07_july.csv">NASA - July 2025</option>
+                        <option value="data/nasa_2025_08_august.csv">NASA - August 2025</option>
+                        <option value="data/nasa_2025_09_september.csv">NASA - September 2025</option>
+                        <option value="data/nasa_2025_10_october.csv">NASA - October 2025</option>
+                        <option value="data/nasa_2025_11_november.csv">NASA - November 2025</option>
+                        <option value="data/nasa_2025_12_december.csv" selected>NASA - December 2025</option>
+                    </optgroup>
+                        <option value="data/openmeteo_2025_01_january.csv">OpenMeteo - January 2025</option>
+                        <option value="data/openmeteo_2025_02_february.csv">OpenMeteo - February 2025</option>
+                        <option value="data/openmeteo_2025_03_march.csv">OpenMeteo - March 2025</option>
                         <option value="data/openmeteo_2025_04_april.csv">OpenMeteo - April 2025</option>
                         <option value="data/openmeteo_2025_05_may.csv">OpenMeteo - May 2025</option>
                         <option value="data/openmeteo_2025_06_june.csv">OpenMeteo - June 2025</option>
@@ -531,7 +546,6 @@
                         <option value="data/openmeteo_2025_11_november.csv">OpenMeteo - November 2025</option>
                         <option value="data/openmeteo_2025_12_december.csv">OpenMeteo - December 2025</option>
                     </optgroup>
-                    <optgroup label="MeteoStat (2025)">
                         <option value="data/meteostat_2025_01_january.csv">MeteoStat - January 2025</option>
                         <option value="data/meteostat_2025_02_february.csv">MeteoStat - February 2025</option>
                         <option value="data/meteostat_2025_03_march.csv">MeteoStat - March 2025</option>
@@ -545,7 +559,6 @@
                         <option value="data/meteostat_2025_11_november.csv">MeteoStat - November 2025</option>
                         <option value="data/meteostat_2025_12_december.csv">MeteoStat - December 2025</option>
                     </optgroup>
-                    <optgroup label="WeatherBit (2025)">
                         <option value="data/weatherbit_2025_01_january.csv">WeatherBit - January 2025</option>
                         <option value="data/weatherbit_2025_02_february.csv">WeatherBit - February 2025</option>
                         <option value="data/weatherbit_2025_03_march.csv">WeatherBit - March 2025</option>
@@ -559,6 +572,17 @@
                         <option value="data/weatherbit_2025_11_november.csv">WeatherBit - November 2025</option>
                         <option value="data/weatherbit_2025_12_december.csv">WeatherBit - December 2025</option>
                     </optgroup>
+                </select>
+            </div>
+            <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <label for="dataTypeSelector" style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Select Data Type:</label>
+                <select id="dataTypeSelector" onchange="loadAndChartData()" class="futuristic-select">
+                    <option value="wind_speed" selected>Wind Speed</option>
+                    <option value="wind_power_density">Wind Power Density</option>
+                    <option value="irradiance">Solar Irradiance</option>
+                    <option value="solar_energy_yield">Solar Energy Yield</option>
+                    <option value="temperature">Temperature</option>
+                    <option value="humidity">Humidity</option>
                 </select>
             </div>
             <div style="padding: 20px; background-color: rgba(15, 23, 42, 0.5); border-radius: 6px; border: 1px solid #334155;">
@@ -577,13 +601,33 @@
     
     let chartInstance = null;
 
+    const dataTypeConfig = {
+        'wind_speed': { label: 'Wind Speed', unit: 'm/s', color: '#06b6d4', type: 'linear' },
+        'wind_power_density': { label: 'Wind Power Density', unit: 'W/m²', color: '#22d3ee', type: 'linear' },
+        'irradiance': { label: 'Solar Irradiance', unit: 'W/m²', color: '#facc15', type: 'logarithmic' },
+        'solar_energy_yield': { label: 'Solar Energy Yield', unit: 'kWh/m²', color: '#fcd34d', type: 'logarithmic' },
+        'temperature': { label: 'Temperature', unit: '°C', color: '#ef4444', type: 'linear' },
+        'humidity': { label: 'Humidity', unit: '%', color: '#a78bfa', type: 'linear' }
+    };
+
     async function loadAndChartData() {
         const fileSelector = document.getElementById('fileSelector');
-        if (!fileSelector) return;
+        const dataTypeSelector = document.getElementById('dataTypeSelector');
+
+        if (!fileSelector || !dataTypeSelector) {
+            console.error("Selectors not found.");
+            return;
+        }
 
         const csvFile = fileSelector.value;
         const selectedLabel = fileSelector.options[fileSelector.selectedIndex].text;
-        const dataType = 'wind_speed';
+        const dataType = dataTypeSelector.value;
+        const config = dataTypeConfig[dataType];
+
+        if (!config) {
+            showError('Invalid data type selected.');
+            return;
+        }
 
         try {
             const response = await fetch(csvFile);
@@ -597,7 +641,7 @@
                 return;
             }
             
-            renderLineChart(data, selectedLabel);
+            renderLineChart(data, selectedLabel, dataType);
         } catch (error) {
             console.error('Error loading data:', error);
             showError('Error: ' + error.message);
@@ -644,7 +688,7 @@
         return { timestamps, values };
     }
 
-    function renderLineChart(data, titleText) {
+    function renderLineChart(data, titleText, dataType) {
         const ctx = document.getElementById('dataChart');
         
         if (!ctx) {
@@ -652,13 +696,15 @@
             return;
         }
 
+        const config = dataTypeConfig[dataType];
+
         if (chartInstance) {
             chartInstance.destroy();
         }
 
         chartInstance = new Chart(ctx, {
             type: 'line',
-            data: {
+            data: { 
                 labels: data.timestamps,
                 datasets: [{
                     label: 'Wind Power (W/m²)',
@@ -671,7 +717,7 @@
                     pointRadius: 0,
                     pointBackgroundColor: 'transparent'
                 }]
-            },
+            }, 
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -680,18 +726,23 @@
                         labels: { color: '#e2e8f0', font: { size: 12 } }
                     },
                     title: {
-                        display: true,
-                        text: titleText || 'API Data Analysis',
-                        color: '#e2e8f0',
-                        font: { size: 14 }
+                        display: true, 
+                        text: `${titleText} - ${config.label}`, 
+                        color: '#e2e8f0', 
+                        font: { size: 14 } 
                     }
                 },
                 scales: {
                     x: {
                         ticks: { display: false },
-                        grid: { color: '#334155' }
+                        grid: { color: '#334155' } 
                     },
                     y: {
+                        type: config.type,
+                        ...(config.type === 'logarithmic' && {
+                            min: 0.01, // Ensure min is not zero for log scale
+                            ticks: { callback: function(value, index, values) { return Number(value.toString()); } } // Format ticks nicely
+                        }),
                         ticks: { color: '#94a3b8', font: { size: 10 } },
                         grid: { color: '#334155' },
                         title: { display: true, text: 'W/m²', color: '#94a3b8' }
