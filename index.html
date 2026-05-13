@@ -466,142 +466,64 @@
 
         <!-- Data Charts Tab -->
         <div class="tab-content" id="data-charts">
-            <h2>Data Charts</h2>
-            <div style="display: flex; gap: 20px; height: calc(100vh - 300px);">
-                <!-- Left sidebar with controls -->
-                <div style="width: 250px; background-color: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 6px; border: 1px solid #334155; overflow-y: auto;">
-                    <div style="margin-bottom: 20px;">
-                        <label for="sourceSelect" style="color: #e2e8f0; font-weight: 600; display: block; margin-bottom: 8px; font-size: 0.9em;">Source Data:</label>
-                        <select id="sourceSelect" style="width: 100%; padding: 8px 10px; background-color: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer; font-size: 0.85em;">
-                            <option value="nasa">NASA</option>
-                            <option value="openmeteo">OpenMeteo</option>
-                            <option value="meteostat">MeteoStat</option>
-                            <option value="weatherbit">WeatherBit</option>
-                        </select>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <label for="dataTypeSelect" style="color: #e2e8f0; font-weight: 600; display: block; margin-bottom: 8px; font-size: 0.9em;">Data Type:</label>
-                        <select id="dataTypeSelect" style="width: 100%; padding: 8px 10px; background-color: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer; font-size: 0.85em;">
-                            <option value="temperature">Temp</option>
-                            <option value="humidity">Humidity</option>
-                            <option value="irradiance">Irradiance</option>
-                            <option value="wind_speed">WindPow</option>
-                            <option value="solar_energy_yield">SolarEnergy</option>
-                        </select>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <label for="dateRangeSelect" style="color: #e2e8f0; font-weight: 600; display: block; margin-bottom: 8px; font-size: 0.9em;">Date Range (2025):</label>
-                        <select id="dateRangeSelect" style="width: 100%; padding: 8px 10px; background-color: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer; font-size: 0.85em;">
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Right side with chart -->
-                <div style="flex: 1; background-color: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 6px; border: 1px solid #334155;">
-                    <div style="margin-bottom: 15px;">
-                        <label for="chartTypeSelect" style="color: #e2e8f0; font-weight: 600; display: block; margin-bottom: 8px; font-size: 0.9em;">Chart Type:</label>
-                        <select id="chartTypeSelect" style="width: 100%; padding: 8px 10px; background-color: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer; font-size: 0.85em;">
-                            <option value="line">Line</option>
-                            <option value="scatter">Scatter + Trendline</option>
-                            <option value="box">Box Plot (Quartile)</option>
-                            <option value="histogram">Histogram (Distribution)</option>
-                            <option value="heatmap">Heatmap (Temporal Pattern)</option>
-                        </select>
-                    </div>
-                    <div id="dataChart" style="width: 100%; height: 400px;"></div>
-                </div>
+            <h2>Data Charts - API Wind Power Analysis</h2>
+            <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <label for="fileSelector" style="color: #e2e8f0; font-weight: 600;">Select Dataset Period:</label>
+                <select id="fileSelector" onchange="loadAndChartData()" style="padding: 8px; border-radius: 4px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; cursor: pointer;">
+                    <option value="data/nasa_2025_12_december.csv">NASA - December 2025</option>
+                    <!-- You can add more <option> elements here as you add more CSV files -->
+                </select>
+            </div>
+            <div style="padding: 20px; background-color: rgba(15, 23, 42, 0.5); border-radius: 6px; border: 1px solid #334155;">
+                <canvas id="dataChart" style="width: 100%; height: 500px;"></canvas>
             </div>
         </div>
             </div><!-- end tab-contents -->
         </div><!-- end tab-layout -->
 
     <script src="script.js"></script>
-    <!-- ECharts for Data Charts Tab (isolated to data-charts only) -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- Chart.js for Data Charts Tab -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-    // ECHARTS DATA CHARTS CONFIGURATION
-    // ===================================
-    // This script is ONLY for the Data Charts tab
-    // Does NOT affect other pages or ML Results chart
-    // Isolated scope to prevent conflicts
+    // CHART.JS - Simple Line Chart
+    // NASA API, Wind Power, December 2025
     
-    let echartsInstance = null;
-    const monthNames = {
-        '01': 'january', '02': 'february', '03': 'march', '04': 'april',
-        '05': 'may', '06': 'june', '07': 'july', '08': 'august',
-        '09': 'september', '10': 'october', '11': 'november', '12': 'december'
-    };
-
-    const dataTypeLabels = {
-        'temperature': 'Temperature (°C)',
-        'humidity': 'Humidity (%)',
-        'irradiance': 'Irradiance (W/m²)',
-        'wind_speed': 'Wind Power (W/m²)',
-        'solar_energy_yield': 'Solar Energy (kWh)'
-    };
-
-    const dataTypeUnits = {
-        'temperature': '°C',
-        'humidity': '%',
-        'irradiance': 'W/m²',
-        'wind_speed': 'W/m²',
-        'solar_energy_yield': 'kWh'
-    };
-
-    const colors = {
-        'nasa': '#06b6d4',
-        'openmeteo': '#f59e0b',
-        'meteostat': '#10b981',
-        'weatherbit': '#8b5cf6'
-    };
+    let chartInstance = null;
 
     async function loadAndChartData() {
-        const source = document.getElementById('sourceSelect').value;
-        const dataType = document.getElementById('dataTypeSelect').value;
-        const monthCode = document.getElementById('dateRangeSelect').value;
-        const chartType = document.getElementById('chartTypeSelect').value;
-        const monthName = monthNames[monthCode];
+        const fileSelector = document.getElementById('fileSelector');
+        if (!fileSelector) return;
 
-        const csvFile = `data/${source}_2025_${monthCode}_${monthName}.csv`;
+        const csvFile = fileSelector.value;
+        const selectedLabel = fileSelector.options[fileSelector.selectedIndex].text;
+        const dataType = 'wind_speed';
 
         try {
             const response = await fetch(csvFile);
-            if (!response.ok) throw new Error('File not found');
+            if (!response.ok) throw new Error('File not found: ' + csvFile);
             
             const text = await response.text();
             const data = parseCSVData(text, dataType);
             
             if (!data.values || data.values.length === 0) {
-                showError('No data available for this selection');
+                showError('No data available');
                 return;
             }
             
-            renderChart(data, source, dataType, monthName, chartType);
+            renderLineChart(data, selectedLabel);
         } catch (error) {
             console.error('Error loading data:', error);
-            showError('Unable to load chart data. ' + error.message);
+            showError('Error: ' + error.message);
         }
     }
 
     function showError(message) {
         const container = document.getElementById('dataChart');
-        if (echartsInstance) {
-            echartsInstance.dispose();
-            echartsInstance = null;
+        if (chartInstance) {
+            chartInstance.destroy();
+            chartInstance = null;
         }
-        container.innerHTML = `<div style="color: #ef4444; text-align: center; padding: 40px; font-size: 0.9em; display: flex; align-items: center; justify-content: center; height: 100%;">⚠ ${message}</div>`;
+        container.innerHTML = `<div style="color: #ef4444; text-align: center; padding: 40px; font-size: 1em;">⚠ ${message}</div>`;
     }
 
     function parseCSVData(csvText, dataType) {
@@ -616,8 +538,8 @@
         tsIndex = headers.indexOf('timestamp');
 
         if (headerIndex === -1 || tsIndex === -1) {
-            console.error('Required columns not found. Headers:', headers);
-            return { timestamps: [], values: [] };
+            console.error('Headers found:', headers);
+            throw new Error('Missing required columns. Expected "timestamp" and "' + dataType + '"');
         }
 
         for (let i = 1; i < lines.length; i++) {
@@ -635,295 +557,66 @@
         return { timestamps, values };
     }
 
-    function renderChart(data, source, dataType, monthName, chartType) {
-        const container = document.getElementById('dataChart');
-        container.innerHTML = '';
+    function renderLineChart(data, titleText) {
+        const ctx = document.getElementById('dataChart');
         
-        if (!echartsInstance) {
-            echartsInstance = echarts.init(container, 'dark');
-        } else {
-            echartsInstance.clear();
+        if (!ctx) {
+            console.error('Chart container not found');
+            return;
         }
 
-        const monthLabel = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-        const unit = dataTypeUnits[dataType];
-        const title = `${source.toUpperCase()} - ${monthLabel} 2025 - ${dataTypeLabels[dataType]}`;
-
-        let option = {};
-
-        if (chartType === 'line') {
-            option = createLineChart(data, title, unit, source);
-        } else if (chartType === 'scatter') {
-            option = createScatterChart(data, title, unit, source);
-        } else if (chartType === 'box') {
-            option = createBoxPlot(data, title, unit, source);
-        } else if (chartType === 'histogram') {
-            option = createHistogram(data, title, unit, source);
-        } else if (chartType === 'heatmap') {
-            option = createHeatmap(data, monthCode, title, unit, source);
+        if (chartInstance) {
+            chartInstance.destroy();
         }
 
-        echartsInstance.setOption(option);
-        window.addEventListener('resize', () => echartsInstance.resize());
-    }
-
-    function createLineChart(data, title, unit, source) {
-        return {
-            title: { text: title, textStyle: { color: '#e2e8f0', fontSize: 12 } },
-            tooltip: { 
-                trigger: 'axis',
-                backgroundColor: 'rgba(15, 23, 42, 0.8)',
-                borderColor: '#334155',
-                textStyle: { color: '#e2e8f0' }
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.timestamps,
+                datasets: [{
+                    label: 'Wind Power (W/m²)',
+                    data: data.values,
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 0,
+                    pointBackgroundColor: 'transparent'
+                }]
             },
-            xAxis: {
-                type: 'category',
-                data: data.timestamps,
-                axisLabel: { show: false },
-                axisLine: { lineStyle: { color: '#334155' } },
-                splitLine: { lineStyle: { color: '#334155' } }
-            },
-            yAxis: {
-                type: 'value',
-                name: unit,
-                nameTextStyle: { color: '#94a3b8', fontSize: 10 },
-                axisLabel: { color: '#94a3b8', fontSize: 9 },
-                axisLine: { lineStyle: { color: '#334155' } },
-                splitLine: { lineStyle: { color: '#334155' } }
-            },
-            series: [{
-                data: data.values,
-                type: 'line',
-                smooth: 0.3,
-                lineStyle: { width: 1.5, color: colors[source] },
-                areaStyle: { color: `${colors[source]}20` },
-                itemStyle: { opacity: 0 }
-            }],
-            grid: { left: 50, right: 30, top: 60, bottom: 40 }
-        };
-    }
-
-    function createScatterChart(data, title, unit, source) {
-        // Prepare scatter data with trendline
-        const scatterData = data.values.map((v, i) => [i, v]);
-        const trendline = calculateTrendline(data.values);
-
-        return {
-            title: { text: `${title} (with Linear Trendline)`, textStyle: { color: '#e2e8f0', fontSize: 12 } },
-            tooltip: { 
-                trigger: 'item',
-                backgroundColor: 'rgba(15, 23, 42, 0.8)',
-                borderColor: '#334155',
-                textStyle: { color: '#e2e8f0' }
-            },
-            xAxis: {
-                type: 'value',
-                name: 'Time Index (hourly)',
-                nameTextStyle: { color: '#94a3b8', fontSize: 10 },
-                axisLabel: { color: '#94a3b8', fontSize: 9 },
-                axisLine: { lineStyle: { color: '#334155' } },
-                splitLine: { lineStyle: { color: '#334155' } }
-            },
-            yAxis: {
-                type: 'value',
-                name: unit,
-                nameTextStyle: { color: '#94a3b8', fontSize: 10 },
-                axisLabel: { color: '#94a3b8', fontSize: 9 },
-                axisLine: { lineStyle: { color: '#334155' } },
-                splitLine: { lineStyle: { color: '#334155' } }
-            },
-            series: [
-                {
-                    data: scatterData,
-                    type: 'scatter',
-                    symbolSize: 4,
-                    itemStyle: { color: colors[source], opacity: 0.6 }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#e2e8f0', font: { size: 12 } }
+                    },
+                    title: {
+                        display: true,
+                        text: titleText || 'API Data Analysis',
+                        color: '#e2e8f0',
+                        font: { size: 14 }
+                    }
                 },
-                {
-                    data: trendline,
-                    type: 'line',
-                    lineStyle: { color: '#ef4444', width: 2, type: 'dashed' },
-                    itemStyle: { opacity: 0 },
-                    name: 'Trendline'
-                }
-            ],
-            grid: { left: 70, right: 30, top: 60, bottom: 50 }
-        };
-    }
-
-    function createBoxPlot(data, title, unit, source) {
-        // Calculate quartiles
-        const sorted = [...data.values].sort((a, b) => a - b);
-        const q1Index = Math.floor(sorted.length * 0.25);
-        const q2Index = Math.floor(sorted.length * 0.5);
-        const q3Index = Math.floor(sorted.length * 0.75);
-        
-        const q1 = sorted[q1Index];
-        const q2 = sorted[q2Index];
-        const q3 = sorted[q3Index];
-        const iqr = q3 - q1;
-        const lower = Math.max(sorted[0], q1 - 1.5 * iqr);
-        const upper = Math.min(sorted[sorted.length - 1], q3 + 1.5 * iqr);
-
-        return {
-            title: { text: `${title} (Quartile Analysis)`, textStyle: { color: '#e2e8f0', fontSize: 12 } },
-            tooltip: { 
-                trigger: 'item',
-                backgroundColor: 'rgba(15, 23, 42, 0.8)',
-                borderColor: '#334155',
-                textStyle: { color: '#e2e8f0' }
-            },
-            xAxis: { type: 'category', data: [source], axisLine: { lineStyle: { color: '#334155' } } },
-            yAxis: {
-                type: 'value',
-                name: unit,
-                nameTextStyle: { color: '#94a3b8', fontSize: 10 },
-                axisLabel: { color: '#94a3b8', fontSize: 9 },
-                axisLine: { lineStyle: { color: '#334155' } },
-                splitLine: { lineStyle: { color: '#334155' } }
-            },
-            series: [{
-                data: [[0, lower, q1, q2, q3, upper]],
-                type: 'boxplot',
-                itemStyle: { borderColor: colors[source], color: colors[source] }
-            }],
-            grid: { left: 70, right: 30, top: 60, bottom: 40 }
-        };
-    }
-
-    function createHistogram(data, title, unit, source) {
-        // Create histogram bins
-        const min = Math.min(...data.values);
-        const max = Math.max(...data.values);
-        const binCount = Math.ceil(Math.sqrt(data.values.length));
-        const binSize = (max - min) / binCount;
-        
-        const bins = Array(binCount).fill(0);
-        const binLabels = [];
-        
-        for (let i = 0; i < binCount; i++) {
-            binLabels.push(`${(min + i * binSize).toFixed(1)}-${(min + (i + 1) * binSize).toFixed(1)}`);
-        }
-
-        data.values.forEach(v => {
-            const binIndex = Math.min(Math.floor((v - min) / binSize), binCount - 1);
-            if (binIndex >= 0) bins[binIndex]++;
-        });
-
-        return {
-            title: { text: `${title} (Distribution)`, textStyle: { color: '#e2e8f0', fontSize: 12 } },
-            tooltip: { 
-                trigger: 'axis',
-                backgroundColor: 'rgba(15, 23, 42, 0.8)',
-                borderColor: '#334155',
-                textStyle: { color: '#e2e8f0' }
-            },
-            xAxis: {
-                type: 'category',
-                data: binLabels,
-                axisLabel: { color: '#94a3b8', fontSize: 8, rotate: 45 },
-                axisLine: { lineStyle: { color: '#334155' } }
-            },
-            yAxis: {
-                type: 'value',
-                name: 'Frequency',
-                nameTextStyle: { color: '#94a3b8', fontSize: 10 },
-                axisLabel: { color: '#94a3b8', fontSize: 9 },
-                axisLine: { lineStyle: { color: '#334155' } },
-                splitLine: { lineStyle: { color: '#334155' } }
-            },
-            series: [{
-                data: bins,
-                type: 'bar',
-                itemStyle: { color: colors[source] }
-            }],
-            grid: { left: 60, right: 30, top: 60, bottom: 70 }
-        };
-    }
-
-    function createHeatmap(data, monthCode, title, unit, source) {
-        // Create day-hour matrix (30/31 days x 24 hours)
-        const daysInMonth = new Date(2025, parseInt(monthCode), 0).getDate();
-        const matrix = Array(daysInMonth).fill(null).map(() => Array(24).fill(0));
-        
-        let dayIndex = 0;
-        let hourIndex = 0;
-        
-        data.values.forEach(v => {
-            if (hourIndex < 24 && dayIndex < daysInMonth) {
-                matrix[dayIndex][hourIndex] = v;
-                hourIndex++;
-                if (hourIndex === 24) {
-                    hourIndex = 0;
-                    dayIndex++;
+                scales: {
+                    x: {
+                        ticks: { display: false },
+                        grid: { color: '#334155' }
+                    },
+                    y: {
+                        ticks: { color: '#94a3b8', font: { size: 10 } },
+                        grid: { color: '#334155' },
+                        title: { display: true, text: 'W/m²', color: '#94a3b8' }
+                    }
                 }
             }
         });
-
-        // Flatten for heatmap
-        const heatmapData = [];
-        matrix.forEach((day, dayIdx) => {
-            day.forEach((val, hourIdx) => {
-                heatmapData.push([hourIdx, dayIdx, val]);
-            });
-        });
-
-        return {
-            title: { text: `${title} (Daily Pattern)`, textStyle: { color: '#e2e8f0', fontSize: 12 } },
-            tooltip: { 
-                trigger: 'item',
-                backgroundColor: 'rgba(15, 23, 42, 0.8)',
-                borderColor: '#334155',
-                textStyle: { color: '#e2e8f0' }
-            },
-            xAxis: {
-                type: 'category',
-                data: Array(24).fill(0).map((_, i) => `${i}:00`),
-                axisLabel: { color: '#94a3b8', fontSize: 8 },
-                axisLine: { lineStyle: { color: '#334155' } }
-            },
-            yAxis: {
-                type: 'category',
-                data: Array(daysInMonth).fill(0).map((_, i) => `Day ${i + 1}`),
-                axisLabel: { color: '#94a3b8', fontSize: 8 },
-                axisLine: { lineStyle: { color: '#334155' } }
-            },
-            visualMap: {
-                min: Math.min(...data.values),
-                max: Math.max(...data.values),
-                text: ['High', 'Low'],
-                textStyle: { color: '#94a3b8' },
-                inRange: { color: ['#1e293b', colors[source]] }
-            },
-            series: [{
-                data: heatmapData,
-                type: 'heatmap',
-                label: { show: false }
-            }],
-            grid: { left: 60, right: 60, top: 60, bottom: 40 }
-        };
+        
+        console.log('Chart rendered successfully');
     }
 
-    function calculateTrendline(values) {
-        const n = values.length;
-        const sumX = n * (n - 1) / 2;
-        const sumY = values.reduce((a, b) => a + b, 0);
-        const sumXY = values.reduce((sum, v, i) => sum + i * v, 0);
-        const sumX2 = n * (n - 1) * (2 * n - 1) / 6;
-
-        const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-        const intercept = (sumY - slope * sumX) / n;
-
-        return values.map((_, i) => [i, slope * i + intercept]);
-    }
-
-    // Event listeners for all dropdowns
-    ['sourceSelect', 'dataTypeSelect', 'dateRangeSelect', 'chartTypeSelect'].forEach(id => {
-        const elem = document.getElementById(id);
-        if (elem) elem.addEventListener('change', loadAndChartData);
-    });
-
-    // Load initial chart
+    // Load chart on page load
     window.addEventListener('load', () => {
         setTimeout(loadAndChartData, 500);
     });

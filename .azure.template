@@ -1,0 +1,21 @@
+# Azure Configuration Template
+# Copy this file to .env.azure and fill in your Azure credentials
+
+# Azure Storage Account
+# Get these from Azure Portal > Storage Accounts > Access Keys
+AZURE_STORAGE_ACCOUNT=your_storage_account_name
+AZURE_STORAGE_KEY=your_storage_account_access_key
+AZURE_STORAGE_CONTAINER=energy-data
+
+# Azure Cosmos DB
+# Get these from Azure Portal > Cosmos DB > Connection String
+AZURE_COSMOS_ENDPOINT=https://your_cosmos_account.documents.azure.com:443/
+AZURE_COSMOS_KEY=your_cosmos_db_primary_key
+AZURE_COSMOS_DATABASE=energy-data-db
+AZURE_COSMOS_CONTAINER=energy-data
+
+# API Keys (Optional)
+# Only required if using Weatherbit API
+NASA_API_KEY=
+WEATHERBIT_API_KEY=
+OPENMETEO_API_KEY=
