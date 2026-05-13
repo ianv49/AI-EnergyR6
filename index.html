@@ -40,6 +40,39 @@
           grid-template-columns: 1fr;
         }
       }
+
+      /* Futuristic Dropdown Styling */
+      .futuristic-select {
+        appearance: none;
+        background-color: #1e293b;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306b6d4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e2e8f0;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 10px 40px 10px 16px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        min-width: 280px;
+      }
+      .futuristic-select:hover {
+        border-color: #06b6d4;
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+      }
+      .futuristic-select:focus {
+        outline: none;
+        border-color: #fbbf24;
+      }
+      .futuristic-select optgroup {
+        background-color: #0f172a;
+        color: #94a3b8;
+      }
     </style>
 </head>
 <body>
@@ -468,10 +501,64 @@
         <div class="tab-content" id="data-charts">
             <h2>Data Charts - API Wind Power Analysis</h2>
             <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                <label for="fileSelector" style="color: #e2e8f0; font-weight: 600;">Select Dataset Period:</label>
-                <select id="fileSelector" onchange="loadAndChartData()" style="padding: 8px; border-radius: 4px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; cursor: pointer;">
-                    <option value="data/nasa_2025_12_december.csv">NASA - December 2025</option>
-                    <!-- You can add more <option> elements here as you add more CSV files -->
+                <label for="fileSelector" style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Dataset Source & Period:</label>
+                <select id="fileSelector" onchange="loadAndChartData()" class="futuristic-select">
+                    <optgroup label="NASA Power (2025)">
+                        <option value="data/nasa_2025_01_january.csv">NASA - January 2025</option>
+                        <option value="data/nasa_2025_02_february.csv">NASA - February 2025</option>
+                        <option value="data/nasa_2025_03_march.csv">NASA - March 2025</option>
+                        <option value="data/nasa_2025_04_april.csv">NASA - April 2025</option>
+                        <option value="data/nasa_2025_05_may.csv">NASA - May 2025</option>
+                        <option value="data/nasa_2025_06_june.csv">NASA - June 2025</option>
+                        <option value="data/nasa_2025_07_july.csv">NASA - July 2025</option>
+                        <option value="data/nasa_2025_08_august.csv">NASA - August 2025</option>
+                        <option value="data/nasa_2025_09_september.csv">NASA - September 2025</option>
+                        <option value="data/nasa_2025_10_october.csv">NASA - October 2025</option>
+                        <option value="data/nasa_2025_11_november.csv">NASA - November 2025</option>
+                        <option value="data/nasa_2025_12_december.csv" selected>NASA - December 2025</option>
+                    </optgroup>
+                    <optgroup label="OpenMeteo (2025)">
+                        <option value="data/openmeteo_2025_01_january.csv">OpenMeteo - January 2025</option>
+                        <option value="data/openmeteo_2025_02_february.csv">OpenMeteo - February 2025</option>
+                        <option value="data/openmeteo_2025_03_march.csv">OpenMeteo - March 2025</option>
+                        <option value="data/openmeteo_2025_04_april.csv">OpenMeteo - April 2025</option>
+                        <option value="data/openmeteo_2025_05_may.csv">OpenMeteo - May 2025</option>
+                        <option value="data/openmeteo_2025_06_june.csv">OpenMeteo - June 2025</option>
+                        <option value="data/openmeteo_2025_07_july.csv">OpenMeteo - July 2025</option>
+                        <option value="data/openmeteo_2025_08_august.csv">OpenMeteo - August 2025</option>
+                        <option value="data/openmeteo_2025_09_september.csv">OpenMeteo - September 2025</option>
+                        <option value="data/openmeteo_2025_10_october.csv">OpenMeteo - October 2025</option>
+                        <option value="data/openmeteo_2025_11_november.csv">OpenMeteo - November 2025</option>
+                        <option value="data/openmeteo_2025_12_december.csv">OpenMeteo - December 2025</option>
+                    </optgroup>
+                    <optgroup label="MeteoStat (2025)">
+                        <option value="data/meteostat_2025_01_january.csv">MeteoStat - January 2025</option>
+                        <option value="data/meteostat_2025_02_february.csv">MeteoStat - February 2025</option>
+                        <option value="data/meteostat_2025_03_march.csv">MeteoStat - March 2025</option>
+                        <option value="data/meteostat_2025_04_april.csv">MeteoStat - April 2025</option>
+                        <option value="data/meteostat_2025_05_may.csv">MeteoStat - May 2025</option>
+                        <option value="data/meteostat_2025_06_june.csv">MeteoStat - June 2025</option>
+                        <option value="data/meteostat_2025_07_july.csv">MeteoStat - July 2025</option>
+                        <option value="data/meteostat_2025_08_august.csv">MeteoStat - August 2025</option>
+                        <option value="data/meteostat_2025_09_september.csv">MeteoStat - September 2025</option>
+                        <option value="data/meteostat_2025_10_october.csv">MeteoStat - October 2025</option>
+                        <option value="data/meteostat_2025_11_november.csv">MeteoStat - November 2025</option>
+                        <option value="data/meteostat_2025_12_december.csv">MeteoStat - December 2025</option>
+                    </optgroup>
+                    <optgroup label="WeatherBit (2025)">
+                        <option value="data/weatherbit_2025_01_january.csv">WeatherBit - January 2025</option>
+                        <option value="data/weatherbit_2025_02_february.csv">WeatherBit - February 2025</option>
+                        <option value="data/weatherbit_2025_03_march.csv">WeatherBit - March 2025</option>
+                        <option value="data/weatherbit_2025_04_april.csv">WeatherBit - April 2025</option>
+                        <option value="data/weatherbit_2025_05_may.csv">WeatherBit - May 2025</option>
+                        <option value="data/weatherbit_2025_06_june.csv">WeatherBit - June 2025</option>
+                        <option value="data/weatherbit_2025_07_july.csv">WeatherBit - July 2025</option>
+                        <option value="data/weatherbit_2025_08_august.csv">WeatherBit - August 2025</option>
+                        <option value="data/weatherbit_2025_09_september.csv">WeatherBit - September 2025</option>
+                        <option value="data/weatherbit_2025_10_october.csv">WeatherBit - October 2025</option>
+                        <option value="data/weatherbit_2025_11_november.csv">WeatherBit - November 2025</option>
+                        <option value="data/weatherbit_2025_12_december.csv">WeatherBit - December 2025</option>
+                    </optgroup>
                 </select>
             </div>
             <div style="padding: 20px; background-color: rgba(15, 23, 42, 0.5); border-radius: 6px; border: 1px solid #334155;">
