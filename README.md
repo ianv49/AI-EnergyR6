@@ -1,5 +1,9 @@
+AI-Driven Predictive Maintenance for Renewable Energy Assets
+
 # AI-EnergyR6
 https://ianv49.github.io/AI-EnergyR6/
+
+AI-Driven Predictive Maintenance for Renewable Energy Assets
 
 This project develops a cross-platform application for predictive maintenance of renewable energy assets (wind turbines, solar panels, inverters, batteries). It uses IoT sensor data, external weather/solar APIs, and AI/ML models to forecast failures and optimize maintenance schedules.
 
