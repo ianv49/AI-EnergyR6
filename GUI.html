@@ -1165,11 +1165,17 @@
             const futureData = Array.from({length: 7}, () => Math.random() * 80 + 20);
 
             const allData = [...pastData, ...currentData, ...futureData];
-            const labels = [
-                ...Array.from({length: 7}, (_, i) => `Day ${-6 + i}`),
-                ...Array.from({length: 7}, (_, i) => `Day ${1 + i}`),
-                ...Array.from({length: 7}, (_, i) => `Day ${8 + i}`)
-            ];
+            
+            // Generate actual date labels (starting from 6 days ago to 7 days in future)
+            const today = new Date();
+            const labels = [];
+            for (let i = -6; i <= 14; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() + i);
+                const monthStr = date.toLocaleString('default', { month: 'short' });
+                const dayStr = date.getDate();
+                labels.push(`${monthStr}${dayStr}`);
+            }
 
             const ctx = canvas.getContext('2d');
 
