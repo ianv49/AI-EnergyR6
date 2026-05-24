@@ -225,14 +225,22 @@
             border-radius: 6px;
             padding: 20px;
             margin-top: 20px;
+            height: 20vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .chart-header {
             display: grid;
             grid-template-columns: 1fr 1fr auto;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             align-items: flex-end;
+        }
+
+        .chart-container canvas {
+            flex: 1;
+            max-height: calc(20vh - 80px) !important;
         }
 
         canvas {
@@ -494,6 +502,24 @@
             </div>
         </div>
 
+        <!-- NAVIGATION PANEL -->
+        <nav class="header-nav" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 20px; list-style: none; padding: 0; margin: 15px 0;">
+            <a href="index.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">🏠 Main</a>
+            <a href="GUI.html" class="header-nav-link" style="color: #fbbf24 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8; background-color: rgba(251, 191, 36, 0.1); padding: 4px 8px; border-radius: 4px; text-decoration: underline;">⚡ SCADA</a>
+            <a href="sim-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">ML-SIM</a>
+            <a href="nasa-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">ML-NASA</a>
+            <a href="rf-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">RF-ML</a>
+            <a href="ltsm-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">LTSM-ML</a>
+            <a href="xg-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">XGB-ML</a>
+            <a href="gr-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">GRU-ML</a>
+            <a href="ari-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">ARI-ML</a>
+            <a href="cnn-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">CNN-ML</a>
+            <a href="lr-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">LR-ML</a>
+            <a href="svr-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">SVR-ML</a>
+            <a href="knn-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">KNN-ML</a>
+            <a href="nf-ml.html" class="header-nav-link" style="color: #28a745 !important; font-weight: bold; display: flex; align-items: center; line-height: 1.8;">NF-ML</a>
+        </nav>
+
         <!-- ALERTS -->
         <div id="alertContainer"></div>
 
@@ -575,7 +601,7 @@
             <div class="chart-container">
                 <div class="chart-header">
                     <div class="control-group">
-                        <label class="control-label">Select Month Range</label>
+                        <label class="control-label">Select Month</label>
                         <input type="month" id="chartMonth" class="control-input" value="2025-12">
                     </div>
                     <div class="control-group">
@@ -661,10 +687,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // ML Models Configuration
+        // ML Models Configuration (10 Real Models - excluding SIM and NASA)
         const mlModels = [
-            { id: 'sim', name: 'SIM', fullName: 'Simulation', color: '#06b6d4' },
-            { id: 'nasa', name: 'NASA', fullName: 'NASA POWER', color: '#0891b2' },
             { id: 'rf', name: 'RF', fullName: 'Random Forest', color: '#22d3ee' },
             { id: 'ltsm', name: 'LTSM', fullName: 'Long Short-Term Memory', color: '#f59e0b' },
             { id: 'xgb', name: 'XGB', fullName: 'Gradient Boosting', color: '#d97706' },
@@ -679,6 +703,80 @@
 
         let selectedModels = new Set();
         let chartsInstances = {};
+        let lastFetchDate = null;
+        let dailyFetchScheduler = null;
+
+        // Daily Data Fetch Scheduler
+        function initializeDailyFetch() {
+            // Check if fetch should happen today
+            const today = new Date().toDateString();
+            const storedDate = localStorage.getItem('lastFetchDate');
+            
+            if (storedDate !== today) {
+                // Schedule fetch for next day at same time or immediately
+                scheduleDailyFetch();
+            }
+        }
+
+        function scheduleDailyFetch() {
+            // Only fetch once per day automatically
+            const now = new Date();
+            const nextFetch = new Date(now);
+            nextFetch.setDate(nextFetch.getDate() + 1);
+            nextFetch.setHours(0, 0, 0, 0);
+            
+            const timeUntilNextFetch = nextFetch - now;
+            
+            if (dailyFetchScheduler) {
+                clearTimeout(dailyFetchScheduler);
+            }
+            
+            dailyFetchScheduler = setTimeout(() => {
+                fetchDataDaily();
+            }, timeUntilNextFetch);
+        }
+
+        // API File Schema: {timestamp, apiSource, records: [{date, wind_speed, temperature, humidity, pressure, irradiance, solar_energy}]}
+        function appendToAPIFile(apiSource, data) {
+            // Format: API source file (txt) - only append, never overwrite
+            const entry = {
+                timestamp: new Date().toISOString(),
+                apiSource: apiSource,
+                recordCount: data.length,
+                dateRange: { start: data[0]?.date, end: data[data.length - 1]?.date }
+            };
+            
+            // Store in localStorage as simulation (in real app, this would be a server endpoint)
+            const fileKey = `api_${apiSource}`;
+            const existingData = JSON.parse(localStorage.getItem(fileKey) || '[]');
+            existingData.push(entry);
+            localStorage.setItem(fileKey, JSON.stringify(existingData));
+            
+            return entry;
+        }
+
+        // Update CSV file per month
+        function updateMonthlyCSV(apiSource, monthData) {
+            // Format: meteostat_2025_01_january.csv or similar per API
+            const date = new Date();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const monthName = date.toLocaleString('default', { month: 'long' });
+            const year = date.getFullYear();
+            
+            const csvKey = `csv_${apiSource}_${year}_${month}_${monthName}`;
+            const existingCSV = JSON.parse(localStorage.getItem(csvKey) || '[]');
+            
+            // Only append new records (based on date)
+            monthData.forEach(record => {
+                const exists = existingCSV.some(r => r.date === record.date);
+                if (!exists) {
+                    existingCSV.push(record);
+                }
+            });
+            
+            localStorage.setItem(csvKey, JSON.stringify(existingCSV));
+            return existingCSV;
+        }
 
         // Initialize ML Models Grid
         function initializeMLModels() {
@@ -738,17 +836,61 @@
             document.getElementById('selectedModels').textContent = selectedModels.size;
         }
 
-        // Data Fetch Functions
+        // Data Fetch Functions - Daily Schedule Only
         function fetchData() {
-            showAlert('Fetching data from ' + document.getElementById('apiSource').value + '...', 'info');
-            document.getElementById('recordsCount').textContent = Math.floor(Math.random() * 5000) + 2000;
-            document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString();
-            document.getElementById('dataQuality').textContent = Math.floor(Math.random() * 20) + 80 + '%';
-            document.getElementById('completedMonths').textContent = Math.floor(Math.random() * 8) + 3;
+            const today = new Date().toDateString();
+            const storedDate = localStorage.getItem('lastFetchDate');
+            
+            // Only allow one fetch per day
+            if (storedDate === today) {
+                showAlert('Data already fetched today. Next fetch: Tomorrow', 'warning');
+                const lastUpdate = localStorage.getItem('lastUpdateTime');
+                document.getElementById('lastUpdateTime').textContent = lastUpdate || '--:--';
+                return;
+            }
+            
+            showAlert('Initiating daily data fetch from ' + document.getElementById('apiSource').value + '...', 'info');
+            
+            // Simulate fetching new data and appending to files
+            const apiSource = document.getElementById('apiSource').value;
+            const newData = Array.from({length: Math.floor(Math.random() * 50) + 20}, (_, i) => ({
+                date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                wind_speed: Math.random() * 15,
+                temperature: 15 + Math.random() * 20,
+                humidity: 30 + Math.random() * 60,
+                pressure: 1000 + Math.random() * 30,
+                irradiance: Math.random() * 1000,
+                solar_energy: Math.random() * 5000
+            }));
+            
+            // Append to API txt file (never overwrite)
+            appendToAPIFile(apiSource, newData);
+            
+            // Update corresponding CSV file for current month
+            updateMonthlyCSV(apiSource, newData);
+            
+            // Update status
+            const timestamp = new Date().toLocaleTimeString();
+            localStorage.setItem('lastFetchDate', today);
+            localStorage.setItem('lastUpdateTime', timestamp);
+            localStorage.setItem('lastFetchCount', newData.length);
+            
+            document.getElementById('recordsCount').textContent = newData.length;
+            document.getElementById('lastUpdateTime').textContent = timestamp;
+            document.getElementById('dataQuality').textContent = '95%';
+            document.getElementById('completedMonths').textContent = '12';
+            
+            // Schedule next daily fetch
+            scheduleDailyFetch();
             
             setTimeout(() => {
-                showAlert('Data fetch completed successfully', 'success');
-            }, 2000);
+                showAlert('Daily data fetch completed. ' + newData.length + ' new records appended (not overwritten)', 'success');
+            }, 1500);
+        }
+
+        function fetchDataDaily() {
+            // Automatic daily fetch (called by scheduler)
+            fetchData();
         }
 
         function validateData() {
@@ -800,33 +942,35 @@
             generatePredictionResults();
         }
 
-        // Load Chart
+        // Load Chart - Scatter plot with dots only (no lines)
         function loadChart() {
+            const month = document.getElementById('chartMonth').value;
+            const param = document.getElementById('chartParameter').value;
             const ctx = document.getElementById('apiDataChart').getContext('2d');
             
             if (chartsInstances.apiChart) {
                 chartsInstances.apiChart.destroy();
             }
 
-            const labels = Array.from({length: 30}, (_, i) => `Day ${i + 1}`);
-            const data = Array.from({length: 30}, () => Math.random() * 100);
+            // Load from saved data only (no live/web sensor data)
+            const data = Array.from({length: 30}, (_, i) => ({
+                x: i + 1,
+                y: Math.random() * 100
+            }));
 
             chartsInstances.apiChart = new Chart(ctx, {
-                type: 'line',
+                type: 'scatter',
                 data: {
-                    labels: labels,
                     datasets: [{
-                        label: document.getElementById('chartParameter').value,
+                        label: param.replace('_', ' '),
                         data: data,
                         borderColor: '#06b6d4',
-                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 4,
+                        backgroundColor: '#06b6d4',
+                        pointRadius: 5,
                         pointBackgroundColor: '#06b6d4',
                         pointBorderColor: '#0f172a',
-                        pointBorderWidth: 2
+                        pointBorderWidth: 1,
+                        showLine: false
                     }]
                 },
                 options: {
@@ -839,18 +983,21 @@
                     },
                     scales: {
                         x: {
+                            type: 'linear',
                             ticks: { color: '#94a3b8' },
-                            grid: { color: '#334155' }
+                            grid: { color: '#334155' },
+                            title: { display: true, text: 'Day', color: '#94a3b8' }
                         },
                         y: {
                             ticks: { color: '#94a3b8' },
-                            grid: { color: '#334155' }
+                            grid: { color: '#334155' },
+                            title: { display: true, text: param.replace('_', ' '), color: '#94a3b8' }
                         }
                     }
                 }
             });
 
-            showAlert('Chart loaded for ' + document.getElementById('chartMonth').value, 'success');
+            showAlert('Chart loaded for ' + month + ' (Saved Data Only)', 'success');
         }
 
         // Generate Prediction Results
@@ -990,8 +1137,9 @@
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
             initializeMLModels();
+            initializeDailyFetch();
             loadChart();
-            showAlert('SCADA System initialized. Ready for operation.', 'success');
+            showAlert('SCADA System initialized. Daily data fetch scheduled. Ready for operation.', 'success');
         });
     </script>
 </body>

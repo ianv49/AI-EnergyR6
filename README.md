@@ -264,34 +264,33 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
 SCADA Control System Design
 Key Features:
 Industrial SCADA Aesthetic
-
 Dark navy/black background with cyan accent colors
 Status indicators (online/offline lights)
 Monospace font for industrial feel
 Grid-based layout with clean borders
-Section 1: Data Fetch Controls
 
+Section 1: Data Fetch Controls
 API source selector (NASA, OpenMeteo, WeatherBit, Meteostat)
 Date range selection (start/end months)
 Data refresh interval options
 Status panel showing records, quality, completed months
 Real-time update timestamps
-Section 2: API Data Visualization
 
+Section 2: API Data Visualization
 Month range selector
 Parameter selection (wind speed, temperature, humidity, pressure)
 Interactive line chart with live data display
 Dynamic data loading
-Section 3: ML Model Training Control
 
+Section 3: ML Model Training Control
 12 ML models displayed as clickable cards:
 SIM, NASA, RF, LTSM, XGB, GRU, ARI, CNN, LR, SVR, KNN, NF
 Select/Deselect all functionality
 Training progress tracking
 Status indicator per model (Ready/Training/Complete)
 ⚠️ Only complete months validation note (partial months excluded automatically)
-Section 4: Prediction Results
 
+Section 4: Prediction Results
 Dynamic chart generation for each trained model
 3-Week Timeline Display:
 Past 7 Days (solid line - known data)
@@ -300,6 +299,17 @@ Next 7 Days (forecast)
 Color-coded by model for easy identification
 Legend for each prediction section
 Interactive Features
+✓ 10 Real ML Models: 
+RF (Random Forest)
+LTSM (Long Short-Term Memory)
+XGB (Gradient Boosting)
+GRU (Gated Recurrent Unit)
+ARI (ARIMA)
+CNN (Convolutional Neural Network)
+LR (Linear Regression)
+SVR (Support Vector Regression)
+KNN (K-Nearest Neighbors)
+NF (Naive Forecast)
 
 Real-time alerts (success/warning/error/info)
 Button feedback with hover effects
