@@ -266,6 +266,11 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
 - **Deploy to Cloud:** Deploy the containerized application to a cloud platform like AWS, Azure, GCP, or any container hosting service that supports Docker.
 
 ## 🎛️ SCADA Control System Design
+  Sequence Numbering
+  [1] DATA ACQUISITION CONTROL
+  [2] API DATA ANALYSIS
+  [3] MACHINE LEARNING TRAINING CONTROL
+  [4] ML PREDICTION RESULTS & STATISTICS
 
 ### Key Features:
 **Industrial SCADA Aesthetic**

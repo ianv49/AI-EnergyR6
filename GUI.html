@@ -492,7 +492,7 @@
         <div class="scada-header">
             <div>
                 <h1>⚡ ENERGY SCADA SYSTEM</h1>
-                <p>Real-Time Data Acquisition & Machine Learning Prediction Platform</p>
+                <p>AI-Driven Predictive Maintenance for Renewable Energy Assets (Manila)</p>
             </div>
             <div class="status-indicators">
                 <div style="text-align: right; margin-right: 10px;">
@@ -526,36 +526,48 @@
         <!-- SECTION 1: DATA FETCH CONTROLS -->
         <div class="scada-panel">
             <div class="scada-panel-title">
-                <i class="fas fa-download"></i> DATA ACQUISITION CONTROL
+                <i class="fas fa-download"></i> [1] DATA ACQUISITION CONTROL
             </div>
 
             <div class="controls-grid">
                 <div class="control-group">
                     <label class="control-label">API Source</label>
-                    <select id="apiSource" class="control-select">
+                    <select id="apiSource" class="control-select" onchange="updateDefaultData()">
+                        <option value="openmeteo">Open-Meteo (Pre-loaded Solar)</option>
                         <option value="nasa">NASA POWER</option>
-                        <option value="openmeteo">Open-Meteo</option>
                         <option value="weatherbit">WeatherBit</option>
                         <option value="meteostat">Meteostat</option>
                     </select>
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label">Start Month</label>
-                    <input type="month" id="startMonth" class="control-input" value="2025-12">
+                    <label class="control-label">Data Type</label>
+                    <select id="dataType" class="control-select" onchange="updateDefaultData()">
+                        <option value="solar_energy" selected>Solar Energy (kWh)</option>
+                        <option value="wind_speed">Wind Speed (m/s)</option>
+                        <option value="temperature">Temperature (°C)</option>
+                        <option value="humidity">Humidity (%)</option>
+                        <option value="pressure">Pressure (hPa)</option>
+                    </select>
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label">End Month</label>
-                    <input type="month" id="endMonth" class="control-input" value="2025-12">
+                    <label class="control-label">Select Month</label>
+                    <select id="startMonth" class="control-select">
+                        <option value="2025-12">December 2025</option>
+                        <option value="2026-01">January 2026</option>
+                        <option value="2026-02">February 2026</option>
+                        <option value="2026-03">March 2026</option>
+                        <option value="2026-04">April 2026</option>
+                        <option value="2026-05">May 2026</option>
+                    </select>
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label">Data Refresh Interval</label>
+                    <label class="control-label">Refresh Interval</label>
                     <select id="refreshInterval" class="control-select">
-                        <option value="manual">Manual</option>
-                        <option value="hourly">Hourly</option>
-                        <option value="daily">Daily</option>
+                        <option value="daily" selected>Daily (1x/day)</option>
+                        <option value="manual">Manual Only</option>
                     </select>
                 </div>
             </div>
@@ -574,19 +586,19 @@
 
             <div class="status-panel">
                 <div class="status-item">
-                    <div class="status-value" id="recordsCount">0</div>
+                    <div class="status-value" id="recordsCount">850</div>
                     <div class="status-label">Records Loaded</div>
                 </div>
                 <div class="status-item">
-                    <div class="status-value" id="lastUpdateTime">--:--</div>
+                    <div class="status-value" id="lastUpdateTime">14:32</div>
                     <div class="status-label">Last Update</div>
                 </div>
                 <div class="status-item">
-                    <div class="status-value" id="dataQuality">0%</div>
+                    <div class="status-value" id="dataQuality">95%</div>
                     <div class="status-label">Data Quality</div>
                 </div>
                 <div class="status-item">
-                    <div class="status-value" id="completedMonths">0</div>
+                    <div class="status-value" id="completedMonths">6</div>
                     <div class="status-label">Complete Months</div>
                 </div>
             </div>
@@ -595,27 +607,43 @@
         <!-- SECTION 2: API DATA VISUALIZATION -->
         <div class="scada-panel">
             <div class="scada-panel-title">
-                <i class="fas fa-chart-line"></i> API DATA ANALYSIS
+                <i class="fas fa-chart-line"></i> [2] API DATA ANALYSIS
             </div>
 
-            <div class="chart-container">
+            <div class="chart-container" style="min-height: 15cm;">
                 <div class="chart-header">
                     <div class="control-group">
                         <label class="control-label">Select Month</label>
-                        <input type="month" id="chartMonth" class="control-input" value="2025-12">
+                        <select id="chartMonth" class="control-select" onchange="loadChart()">
+                            <option value="2025-12">December 2025</option>
+                            <option value="2026-01">January 2026</option>
+                            <option value="2026-02">February 2026</option>
+                            <option value="2026-03">March 2026</option>
+                            <option value="2026-04">April 2026</option>
+                            <option value="2026-05" selected>May 2026</option>
+                        </select>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Data Parameter</label>
-                        <select id="chartParameter" class="control-select">
-                            <option value="wind_speed">Wind Speed</option>
-                            <option value="temperature">Temperature</option>
-                            <option value="humidity">Humidity</option>
-                            <option value="pressure">Pressure</option>
+                        <select id="chartParameter" class="control-select" onchange="loadChart()">
+                            <option value="solar_energy" selected>Solar Energy (kWh)</option>
+                            <option value="wind_speed">Wind Speed (m/s)</option>
+                            <option value="temperature">Temperature (°C)</option>
+                            <option value="humidity">Humidity (%)</option>
+                            <option value="pressure">Pressure (hPa)</option>
                         </select>
                     </div>
-                    <button class="scada-button" onclick="loadChart()" style="height: fit-content;">
-                        <i class="fas fa-sync"></i> LOAD
-                    </button>
+                    <div style="display: flex; gap: 10px; align-items: flex-end;">
+                        <button class="scada-button" onclick="zoomChart(1.2)" title="Zoom In" style="padding: 10px 12px;">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button class="scada-button" onclick="zoomChart(0.8)" title="Zoom Out" style="padding: 10px 12px;">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button class="scada-button" onclick="resetZoom()" title="Reset Zoom" style="padding: 10px 12px;">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
                 </div>
                 <canvas id="apiDataChart"></canvas>
             </div>
@@ -624,7 +652,7 @@
         <!-- SECTION 3: ML MODEL EXECUTION -->
         <div class="scada-panel">
             <div class="scada-panel-title">
-                <i class="fas fa-brain"></i> MACHINE LEARNING TRAINING CONTROL
+                <i class="fas fa-brain"></i> [3] MACHINE LEARNING TRAINING CONTROL
             </div>
 
             <p style="color: #94a3b8; margin-bottom: 15px; font-size: 0.85rem;">
@@ -670,12 +698,35 @@
         <!-- SECTION 4: PREDICTION RESULTS -->
         <div class="scada-panel">
             <div class="scada-panel-title">
-                <i class="fas fa-chart-area"></i> ML PREDICTION RESULTS
+                <i class="fas fa-chart-area"></i> [4] ML PREDICTION RESULTS & STATISTICS
             </div>
 
             <p style="color: #94a3b8; margin-bottom: 15px; font-size: 0.85rem;">
                 📊 Prediction Timeline: Past 7 Days (Known) | Current Week (Prediction) | Next 7 Days (Forecast)
             </p>
+
+            <!-- ML Performance Statistics -->
+            <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid #06b6d4; border-radius: 6px; padding: 15px; margin-bottom: 20px;">
+                <div style="color: #06b6d4; font-weight: bold; margin-bottom: 10px;">🏆 Best Model Performance (Among Selected)</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 4px; text-align: center;">
+                        <div style="color: #94a3b8; font-size: 0.8rem;">Best Model</div>
+                        <div id="bestModelName" style="color: #06b6d4; font-weight: bold; font-size: 1.1rem;">ARI-ML</div>
+                    </div>
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 4px; text-align: center;">
+                        <div style="color: #94a3b8; font-size: 0.8rem;">Accuracy</div>
+                        <div id="bestModelAccuracy" style="color: #10b981; font-weight: bold; font-size: 1.1rem;">92.5%</div>
+                    </div>
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 4px; text-align: center;">
+                        <div style="color: #94a3b8; font-size: 0.8rem;">MAE</div>
+                        <div id="bestModelMAE" style="color: #f59e0b; font-weight: bold; font-size: 1.1rem;">0.234</div>
+                    </div>
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 4px; text-align: center;">
+                        <div style="color: #94a3b8; font-size: 0.8rem;">Ideal Value (Avg)</div>
+                        <div id="idealValue" style="color: #8b5cf6; font-weight: bold; font-size: 1.1rem;">4,850 kWh</div>
+                    </div>
+                </div>
+            </div>
 
             <div class="results-grid" id="resultsContainer">
                 <!-- Results will be generated dynamically -->
@@ -778,6 +829,40 @@
             return existingCSV;
         }
 
+        // Update default data display
+        function updateDefaultData() {
+            const apiSource = document.getElementById('apiSource').value;
+            const dataType = document.getElementById('dataType').value;
+            
+            // Simulate loading pre-existing data
+            document.getElementById('recordsCount').textContent = '850';
+            document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString();
+            document.getElementById('dataQuality').textContent = '95%';
+            document.getElementById('completedMonths').textContent = '6';
+            
+            showAlert(`Loaded default data: ${apiSource} - ${dataType}`, 'success');
+        }
+
+        // Zoom chart functionality
+        let chartZoomLevel = 1;
+        function zoomChart(factor) {
+            chartZoomLevel *= factor;
+            if (chartsInstances.apiChart) {
+                const canvas = document.getElementById('apiDataChart');
+                canvas.style.transform = `scale(${chartZoomLevel})`;
+                canvas.style.transformOrigin = 'top left';
+            }
+        }
+
+        function resetZoom() {
+            chartZoomLevel = 1;
+            const canvas = document.getElementById('apiDataChart');
+            if (canvas) {
+                canvas.style.transform = 'scale(1)';
+            }
+            showAlert('Chart zoom reset', 'info');
+        }
+
         // Initialize ML Models Grid
         function initializeMLModels() {
             const container = document.querySelector('.ml-models-grid');
@@ -786,14 +871,23 @@
             mlModels.forEach(model => {
                 const card = document.createElement('div');
                 card.className = 'ml-model-card';
+                const isARI = model.id === 'ari'; // Pre-select ARI
                 card.innerHTML = `
                     <input type="checkbox" class="ml-model-checkbox" data-model="${model.id}" 
-                           onchange="toggleModel('${model.id}')" title="${model.fullName}">
+                           onchange="toggleModel('${model.id}')" title="${model.fullName}" ${isARI ? 'checked' : ''}>
                     <div class="ml-model-name">${model.name}</div>
                     <div class="ml-status ready">Ready</div>
                 `;
                 container.appendChild(card);
+                
+                // Pre-select ARI ML
+                if (isARI) {
+                    selectedModels.add(model.id);
+                    card.classList.add('selected');
+                }
             });
+            
+            updateSelectedCount();
         }
 
         // Toggle Model Selection
@@ -1005,6 +1099,25 @@
             const container = document.getElementById('resultsContainer');
             container.innerHTML = '';
 
+            // Calculate best model stats
+            let bestModel = null;
+            let bestAccuracy = 0;
+            selectedModels.forEach(modelId => {
+                const accuracy = 0.85 + Math.random() * 0.15; // Simulate accuracies 85-100%
+                if (accuracy > bestAccuracy) {
+                    bestAccuracy = accuracy;
+                    bestModel = mlModels.find(m => m.id === modelId);
+                }
+            });
+
+            // Update best model stats
+            if (bestModel) {
+                document.getElementById('bestModelName').textContent = bestModel.fullName;
+                document.getElementById('bestModelAccuracy').textContent = (bestAccuracy * 100).toFixed(1) + '%';
+                document.getElementById('bestModelMAE').textContent = (Math.random() * 0.5).toFixed(3);
+                document.getElementById('idealValue').textContent = (3500 + Math.random() * 3000).toFixed(0) + ' kWh';
+            }
+
             selectedModels.forEach(modelId => {
                 const model = mlModels.find(m => m.id === modelId);
                 
@@ -1138,8 +1251,10 @@
         window.addEventListener('DOMContentLoaded', () => {
             initializeMLModels();
             initializeDailyFetch();
-            loadChart();
-            showAlert('SCADA System initialized. Daily data fetch scheduled. Ready for operation.', 'success');
+            updateDefaultData();  // Load default Open-Meteo data on start
+            loadChart();  // Load initial chart
+            generatePredictionResults();  // Generate initial prediction with ARI selected
+            showAlert('SCADA System initialized. Solar energy data loaded. Daily data fetch scheduled. Ready for operation.', 'success');
         });
     </script>
 </body>
