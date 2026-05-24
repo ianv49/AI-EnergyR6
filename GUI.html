@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy SCADA Control System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #06b6d4;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .scada-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .scada-header {
+            background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+            border: 2px solid #06b6d4;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .scada-header h1 {
+            font-size: 2em;
+            color: #06b6d4;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+            letter-spacing: 3px;
+        }
+
+        .scada-header p {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .status-indicators {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .status-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            position: relative;
+            box-shadow: 0 0 8px;
+        }
+
+        .status-light.online {
+            background: #10b981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.8);
+            border-color: #10b981;
+        }
+
+        .status-light.processing {
+            background: #f59e0b;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);
+            border-color: #f59e0b;
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-light.offline {
+            background: #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+            border-color: #ef4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* PANELS */
+        .scada-panel {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #06b6d4;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.1), 0 0 15px rgba(6, 182, 212, 0.2);
+        }
+
+        .scada-panel-title {
+            color: #06b6d4;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #06b6d4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 2px;
+        }
+
+        .scada-panel-title i {
+            color: #f59e0b;
+        }
+
+        /* CONTROL SECTION */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .control-label {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .control-input, .control-select {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #06b6d4;
+            color: #06b6d4;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .control-input:focus, .control-select:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .scada-button {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            border: 2px solid #06b6d4;
+            color: #0f172a;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+        }
+
+        .scada-button:hover {
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .scada-button:active {
+            transform: translateY(0);
+        }
+
+        .scada-button.secondary {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-color: #f59e0b;
+            color: #0f172a;
+        }
+
+        .scada-button.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #10b981;
+            color: #0f172a;
+        }
+
+        .scada-button.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-color: #ef4444;
+            color: #fff;
+        }
+
+        .scada-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* DATA CHART SECTION */
+        .chart-container {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: flex-end;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px 0;
+        }
+
+        /* ML SECTION */
+        .ml-models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ml-model-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #334155;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .ml-model-card:hover {
+            border-color: #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .ml-model-card.selected {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: #06b6d4;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+        }
+
+        .ml-model-checkbox {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .ml-model-name {
+            color: #06b6d4;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .ml-status {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            height: 18px;
+        }
+
+        .ml-status.ready {
+            color: #10b981;
+        }
+
+        .ml-status.running {
+            color: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+
+        .ml-status.complete {
+            color: #10b981;
+        }
+
+        .ml-status.error {
+            color: #ef4444;
+        }
+
+        /* RESULTS SECTION */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #334155;
+            border-radius: 6px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            border-color: #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .result-title {
+            color: #06b6d4;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-chart {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
+
+        .prediction-legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        /* STATUS PANEL */
+        .status-panel {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-value {
+            color: #06b6d4;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .status-label {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* ALERTS */
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
+            border-left: 4px solid;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert.info {
+            background: rgba(6, 182, 212, 0.1);
+            border-color: #06b6d4;
+            color: #06b6d4;
+        }
+
+        .alert.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .alert.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: #f59e0b;
+            color: #f59e0b;
+        }
+
+        .alert.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .scada-header {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-header {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* LOADING SPINNER */
+        .spinner {
+            border: 3px solid rgba(6, 182, 212, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #06b6d4;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scada-container">
+        <!-- HEADER -->
+        <div class="scada-header">
+            <div>
+                <h1>⚡ ENERGY SCADA SYSTEM</h1>
+                <p>Real-Time Data Acquisition & Machine Learning Prediction Platform</p>
+            </div>
+            <div class="status-indicators">
+                <div style="text-align: right; margin-right: 10px;">
+                    <div style="color: #94a3b8; font-size: 0.75rem; margin-bottom: 5px;">SYSTEM STATUS</div>
+                    <div class="status-light online"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ALERTS -->
+        <div id="alertContainer"></div>
+
+        <!-- SECTION 1: DATA FETCH CONTROLS -->
+        <div class="scada-panel">
+            <div class="scada-panel-title">
+                <i class="fas fa-download"></i> DATA ACQUISITION CONTROL
+            </div>
+
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label class="control-label">API Source</label>
+                    <select id="apiSource" class="control-select">
+                        <option value="nasa">NASA POWER</option>
+                        <option value="openmeteo">Open-Meteo</option>
+                        <option value="weatherbit">WeatherBit</option>
+                        <option value="meteostat">Meteostat</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Start Month</label>
+                    <input type="month" id="startMonth" class="control-input" value="2025-12">
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">End Month</label>
+                    <input type="month" id="endMonth" class="control-input" value="2025-12">
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Data Refresh Interval</label>
+                    <select id="refreshInterval" class="control-select">
+                        <option value="manual">Manual</option>
+                        <option value="hourly">Hourly</option>
+                        <option value="daily">Daily</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="scada-button" onclick="fetchData()">
+                    <i class="fas fa-sync"></i> FETCH DATA
+                </button>
+                <button class="scada-button secondary" onclick="validateData()">
+                    <i class="fas fa-check"></i> VALIDATE
+                </button>
+                <button class="scada-button danger" onclick="clearData()">
+                    <i class="fas fa-trash"></i> CLEAR
+                </button>
+            </div>
+
+            <div class="status-panel">
+                <div class="status-item">
+                    <div class="status-value" id="recordsCount">0</div>
+                    <div class="status-label">Records Loaded</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="lastUpdateTime">--:--</div>
+                    <div class="status-label">Last Update</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="dataQuality">0%</div>
+                    <div class="status-label">Data Quality</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="completedMonths">0</div>
+                    <div class="status-label">Complete Months</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: API DATA VISUALIZATION -->
+        <div class="scada-panel">
+            <div class="scada-panel-title">
+                <i class="fas fa-chart-line"></i> API DATA ANALYSIS
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="control-group">
+                        <label class="control-label">Select Month Range</label>
+                        <input type="month" id="chartMonth" class="control-input" value="2025-12">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Data Parameter</label>
+                        <select id="chartParameter" class="control-select">
+                            <option value="wind_speed">Wind Speed</option>
+                            <option value="temperature">Temperature</option>
+                            <option value="humidity">Humidity</option>
+                            <option value="pressure">Pressure</option>
+                        </select>
+                    </div>
+                    <button class="scada-button" onclick="loadChart()" style="height: fit-content;">
+                        <i class="fas fa-sync"></i> LOAD
+                    </button>
+                </div>
+                <canvas id="apiDataChart"></canvas>
+            </div>
+        </div>
+
+        <!-- SECTION 3: ML MODEL EXECUTION -->
+        <div class="scada-panel">
+            <div class="scada-panel-title">
+                <i class="fas fa-brain"></i> MACHINE LEARNING TRAINING CONTROL
+            </div>
+
+            <p style="color: #94a3b8; margin-bottom: 15px; font-size: 0.85rem;">
+                ⚠ Only complete months will be used for training. Current months with partial data are automatically excluded.
+            </p>
+
+            <div class="ml-models-grid">
+                <!-- ML Models will be generated dynamically -->
+            </div>
+
+            <div class="button-group" style="margin-top: 20px;">
+                <button class="scada-button success" onclick="selectAllModels()">
+                    <i class="fas fa-check-double"></i> SELECT ALL
+                </button>
+                <button class="scada-button danger" onclick="deselectAllModels()">
+                    <i class="fas fa-times"></i> CLEAR SELECTION
+                </button>
+                <button class="scada-button secondary" onclick="startMLTraining()" style="grid-column: span 2;">
+                    <i class="fas fa-play"></i> START TRAINING
+                </button>
+            </div>
+
+            <div class="status-panel" style="margin-top: 20px;">
+                <div class="status-item">
+                    <div class="status-value" id="selectedModels">0</div>
+                    <div class="status-label">Selected Models</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="trainingProgress">0%</div>
+                    <div class="status-label">Training Progress</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="completedModels">0</div>
+                    <div class="status-label">Completed</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="estimatedTime">--:--</div>
+                    <div class="status-label">Est. Time Remaining</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: PREDICTION RESULTS -->
+        <div class="scada-panel">
+            <div class="scada-panel-title">
+                <i class="fas fa-chart-area"></i> ML PREDICTION RESULTS
+            </div>
+
+            <p style="color: #94a3b8; margin-bottom: 15px; font-size: 0.85rem;">
+                📊 Prediction Timeline: Past 7 Days (Known) | Current Week (Prediction) | Next 7 Days (Forecast)
+            </p>
+
+            <div class="results-grid" id="resultsContainer">
+                <!-- Results will be generated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // ML Models Configuration
+        const mlModels = [
+            { id: 'sim', name: 'SIM', fullName: 'Simulation', color: '#06b6d4' },
+            { id: 'nasa', name: 'NASA', fullName: 'NASA POWER', color: '#0891b2' },
+            { id: 'rf', name: 'RF', fullName: 'Random Forest', color: '#22d3ee' },
+            { id: 'ltsm', name: 'LTSM', fullName: 'Long Short-Term Memory', color: '#f59e0b' },
+            { id: 'xgb', name: 'XGB', fullName: 'Gradient Boosting', color: '#d97706' },
+            { id: 'gru', name: 'GRU', fullName: 'Gated Recurrent Unit', color: '#10b981' },
+            { id: 'ari', name: 'ARI', fullName: 'ARIMA', color: '#059669' },
+            { id: 'cnn', name: 'CNN', fullName: 'Convolutional Neural Network', color: '#fbbf24' },
+            { id: 'lr', name: 'LR', fullName: 'Linear Regression', color: '#fcd34d' },
+            { id: 'svr', name: 'SVR', fullName: 'Support Vector Regression', color: '#ef4444' },
+            { id: 'knn', name: 'KNN', fullName: 'K-Nearest Neighbors', color: '#dc2626' },
+            { id: 'nf', name: 'NF', fullName: 'Naive Forecast', color: '#a78bfa' }
+        ];
+
+        let selectedModels = new Set();
+        let chartsInstances = {};
+
+        // Initialize ML Models Grid
+        function initializeMLModels() {
+            const container = document.querySelector('.ml-models-grid');
+            container.innerHTML = '';
+
+            mlModels.forEach(model => {
+                const card = document.createElement('div');
+                card.className = 'ml-model-card';
+                card.innerHTML = `
+                    <input type="checkbox" class="ml-model-checkbox" data-model="${model.id}" 
+                           onchange="toggleModel('${model.id}')" title="${model.fullName}">
+                    <div class="ml-model-name">${model.name}</div>
+                    <div class="ml-status ready">Ready</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Toggle Model Selection
+        function toggleModel(modelId) {
+            const checkbox = document.querySelector(`[data-model="${modelId}"]`);
+            const card = checkbox.closest('.ml-model-card');
+
+            if (checkbox.checked) {
+                selectedModels.add(modelId);
+                card.classList.add('selected');
+            } else {
+                selectedModels.delete(modelId);
+                card.classList.remove('selected');
+            }
+
+            updateSelectedCount();
+        }
+
+        function selectAllModels() {
+            document.querySelectorAll('.ml-model-checkbox').forEach(cb => {
+                cb.checked = true;
+                selectedModels.add(cb.dataset.model);
+                cb.closest('.ml-model-card').classList.add('selected');
+            });
+            updateSelectedCount();
+            showAlert('All models selected', 'success');
+        }
+
+        function deselectAllModels() {
+            document.querySelectorAll('.ml-model-checkbox').forEach(cb => {
+                cb.checked = false;
+                cb.closest('.ml-model-card').classList.remove('selected');
+            });
+            selectedModels.clear();
+            updateSelectedCount();
+            showAlert('Selection cleared', 'info');
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedModels').textContent = selectedModels.size;
+        }
+
+        // Data Fetch Functions
+        function fetchData() {
+            showAlert('Fetching data from ' + document.getElementById('apiSource').value + '...', 'info');
+            document.getElementById('recordsCount').textContent = Math.floor(Math.random() * 5000) + 2000;
+            document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString();
+            document.getElementById('dataQuality').textContent = Math.floor(Math.random() * 20) + 80 + '%';
+            document.getElementById('completedMonths').textContent = Math.floor(Math.random() * 8) + 3;
+            
+            setTimeout(() => {
+                showAlert('Data fetch completed successfully', 'success');
+            }, 2000);
+        }
+
+        function validateData() {
+            showAlert('Validating data integrity...', 'info');
+            setTimeout(() => {
+                showAlert('Data validation passed ✓', 'success');
+            }, 1500);
+        }
+
+        function clearData() {
+            if (confirm('Clear all loaded data?')) {
+                document.getElementById('recordsCount').textContent = '0';
+                document.getElementById('dataQuality').textContent = '0%';
+                showAlert('Data cleared', 'warning');
+            }
+        }
+
+        // ML Training Function
+        async function startMLTraining() {
+            if (selectedModels.size === 0) {
+                showAlert('Please select at least one model', 'warning');
+                return;
+            }
+
+            showAlert('Training started on ' + selectedModels.size + ' models...', 'info');
+
+            let completed = 0;
+            const total = selectedModels.size;
+
+            for (const modelId of selectedModels) {
+                const card = document.querySelector(`[data-model="${modelId}"]`).closest('.ml-model-card');
+                const statusDiv = card.querySelector('.ml-status');
+                
+                statusDiv.textContent = 'Training...';
+                statusDiv.className = 'ml-status running';
+
+                // Simulate training (2-5 seconds per model)
+                await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 3000));
+
+                completed++;
+                statusDiv.textContent = 'Complete';
+                statusDiv.className = 'ml-status complete';
+
+                document.getElementById('trainingProgress').textContent = Math.floor((completed / total) * 100) + '%';
+                document.getElementById('completedModels').textContent = completed;
+            }
+
+            showAlert('All training completed successfully!', 'success');
+            generatePredictionResults();
+        }
+
+        // Load Chart
+        function loadChart() {
+            const ctx = document.getElementById('apiDataChart').getContext('2d');
+            
+            if (chartsInstances.apiChart) {
+                chartsInstances.apiChart.destroy();
+            }
+
+            const labels = Array.from({length: 30}, (_, i) => `Day ${i + 1}`);
+            const data = Array.from({length: 30}, () => Math.random() * 100);
+
+            chartsInstances.apiChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: document.getElementById('chartParameter').value,
+                        data: data,
+                        borderColor: '#06b6d4',
+                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#06b6d4',
+                        pointBorderColor: '#0f172a',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e2e8f0', font: { size: 12 } }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: '#334155' }
+                        },
+                        y: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: '#334155' }
+                        }
+                    }
+                }
+            });
+
+            showAlert('Chart loaded for ' + document.getElementById('chartMonth').value, 'success');
+        }
+
+        // Generate Prediction Results
+        function generatePredictionResults() {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+
+            selectedModels.forEach(modelId => {
+                const model = mlModels.find(m => m.id === modelId);
+                
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-title" style="color: ${model.color};">
+                        <i class="fas fa-chart-area"></i> ${model.fullName}
+                    </div>
+                    <div class="result-chart">
+                        <canvas id="chart-${modelId}"></canvas>
+                    </div>
+                    <div class="prediction-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #06b6d4;"></div>
+                            <span>Past 7 Days (Known)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: ${model.color};"></div>
+                            <span>Current Week (Pred)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #f59e0b; border-radius: 0;"></div>
+                            <span>Next 7 Days (Forecast)</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+
+                // Create chart after element is added
+                setTimeout(() => createPredictionChart(modelId, model), 100);
+            });
+        }
+
+        // Create Prediction Chart
+        function createPredictionChart(modelId, model) {
+            const canvasId = `chart-${modelId}`;
+            const canvas = document.getElementById(canvasId);
+            
+            if (!canvas) return;
+
+            // Generate data: 7 past + 7 current + 7 future
+            const pastData = Array.from({length: 7}, () => Math.random() * 80 + 20);
+            const currentData = Array.from({length: 7}, () => Math.random() * 80 + 20);
+            const futureData = Array.from({length: 7}, () => Math.random() * 80 + 20);
+
+            const allData = [...pastData, ...currentData, ...futureData];
+            const labels = [
+                ...Array.from({length: 7}, (_, i) => `Day ${-6 + i}`),
+                ...Array.from({length: 7}, (_, i) => `Day ${1 + i}`),
+                ...Array.from({length: 7}, (_, i) => `Day ${8 + i}`)
+            ];
+
+            const ctx = canvas.getContext('2d');
+
+            if (chartsInstances[canvasId]) {
+                chartsInstances[canvasId].destroy();
+            }
+
+            chartsInstances[canvasId] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Known (Past 7 Days)',
+                            data: [...pastData, null, null, null, null, null, null, null, null, null, null, null, null, null],
+                            borderColor: '#06b6d4',
+                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#06b6d4'
+                        },
+                        {
+                            label: 'Prediction',
+                            data: [null, null, null, null, null, null, pastData[6], ...currentData, ...futureData.slice(0, -1)],
+                            borderColor: model.color,
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 3,
+                            pointBackgroundColor: model.color,
+                            pointBorderColor: '#0f172a',
+                            pointBorderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: { color: '#e2e8f0', font: { size: 10 } }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#94a3b8', font: { size: 9 } },
+                            grid: { color: '#334155' }
+                        },
+                        y: {
+                            ticks: { color: '#94a3b8', font: { size: 9 } },
+                            grid: { color: '#334155' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Alert System
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert ${type} show`;
+            alert.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+            
+            alertContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 300);
+            }, 4000);
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeMLModels();
+            loadChart();
+            showAlert('SCADA System initialized. Ready for operation.', 'success');
+        });
+    </script>
+</body>
+</html>
