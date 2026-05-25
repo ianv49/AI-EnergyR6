@@ -692,10 +692,6 @@
                     <div class="status-value" id="completedModels">0</div>
                     <div class="status-label">Completed</div>
                 </div>
-                <div class="status-item">
-                    <div class="status-value" id="estimatedTime">--:--</div>
-                    <div class="status-label">Est. Time Remaining</div>
-                </div>
             </div>
         </div>
 
@@ -1160,11 +1156,15 @@
                     <div class="prediction-legend">
                         <div class="legend-item">
                             <div class="legend-color" style="background: #06b6d4;"></div>
-                            <span>Past 7 Days (Actual Sensor Data)</span>
+                            <span>Last Week (Actual Sensor Data)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #8b5cf6;"></div>
+                            <span>Current Week</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: ${model.color};"></div>
-                            <span>Next 7 Days (Forecast)</span>
+                            <span>Next Week (Forecast)</span>
                         </div>
                     </div>
                     <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid #06b6d4; border-radius: 6px; padding: 12px; margin-top: 15px;">
@@ -1203,8 +1203,12 @@
             
             if (!canvas) return;
 
-            // Generate data: 7 past + 7 current + 7 future
-            const pastData = Array.from({length: 7}, () => Math.random() * 80 + 20);
+            // Use same sensor data for all models (last week actual data)
+            // Generate this once and reuse for consistency
+            if (!window.sensorData) {
+                window.sensorData = Array.from({length: 7}, () => Math.random() * 80 + 20);
+            }
+            const pastData = window.sensorData; // Same across all models
             const currentData = Array.from({length: 7}, () => Math.random() * 80 + 20);
             const futureData = Array.from({length: 7}, () => Math.random() * 80 + 20);
 
@@ -1233,7 +1237,7 @@
                     labels: labels,
                     datasets: [
                         {
-                            label: 'Known (Past 7 Days)',
+                            label: 'Last Week (Actual Sensor Data)',
                             data: [...pastData, null, null, null, null, null, null, null, null, null, null, null, null, null],
                             borderColor: '#06b6d4',
                             backgroundColor: 'rgba(6, 182, 212, 0.1)',
@@ -1244,8 +1248,21 @@
                             pointBackgroundColor: '#06b6d4'
                         },
                         {
-                            label: 'Prediction',
-                            data: [null, null, null, null, null, null, pastData[6], ...currentData, ...futureData.slice(0, -1)],
+                            label: 'Current Week',
+                            data: [null, null, null, null, null, null, pastData[6], ...currentData, null, null, null, null, null, null],
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#8b5cf6',
+                            pointBorderColor: '#0f172a',
+                            pointBorderWidth: 1
+                        },
+                        {
+                            label: 'Next Week (Forecast)',
+                            data: [null, null, null, null, null, null, null, null, null, null, null, null, null, ...futureData],
                             borderColor: model.color,
                             backgroundColor: 'transparent',
                             borderWidth: 2,
