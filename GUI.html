@@ -613,14 +613,8 @@
             <div class="chart-container" style="min-height: 15cm;">
                 <div class="chart-header">
                     <div class="control-group">
-                        <label class="control-label">Select Month</label>
-                        <select id="chartMonth" class="control-select" onchange="loadChart()">
-                            <option value="2025-12" selected>December 2025</option>
-                            <option value="2026-01">January 2026</option>
-                            <option value="2026-02">February 2026</option>
-                            <option value="2026-03">March 2026</option>
-                            <option value="2026-04">April 2026</option>
-                            <option value="2026-05">May 2026</option>
+                        <label class="control-label">Select API Data File</label>
+                        <select id="chartCSV" class="control-select" onchange="loadChart()">
                         </select>
                     </div>
                     <div class="control-group">
@@ -1019,23 +1013,70 @@
         }
 
         // Load Chart - Scatter plot with dots only (no lines)
+        // Dynamically populate CSV dropdown and load chart
+        async function populateCSVFiles() {
+            const csvFiles = [
+                'data/openmeteo_2025_12_december.csv',
+                'data/openmeteo_2026_01_january.csv',
+                'data/openmeteo_2026_02_february.csv',
+                'data/openmeteo_2026_03_march.csv',
+                'data/openmeteo_2026_04_april.csv',
+                'data/openmeteo_2026_05_may.csv',
+                'data/meteostat_2025_01_january.csv',
+                'data/meteostat_2025_02_february.csv',
+                'data/meteostat_2025_03_march.csv',
+                'data/meteostat_2025_04_april.csv',
+                'data/meteostat_2025_05_may.csv',
+                'data/meteostat_2025_06_june.csv',
+                'data/meteostat_2025_07_july.csv',
+                'data/meteostat_2025_08_august.csv',
+                'data/meteostat_2025_09_september.csv',
+                'data/meteostat_2025_10_october.csv',
+                'data/meteostat_2025_11_november.csv',
+                'data/meteostat_2025_12_december.csv',
+                'data/nasa_2025_01_january.csv',
+                'data/nasa_2025_02_february.csv',
+                'data/nasa_2025_03_march.csv',
+                'data/nasa_2025_04_april.csv',
+                'data/nasa_2025_05_may.csv',
+                'data/nasa_2025_06_june.csv',
+                'data/nasa_2025_07_july.csv',
+                'data/nasa_2025_08_august.csv',
+                'data/nasa_2025_09_september.csv',
+                'data/nasa_2025_10_october.csv',
+                'data/nasa_2025_11_november.csv',
+                'data/nasa_2025_12_december.csv',
+                'data/weatherbit_2025_01_january.csv',
+                'data/weatherbit_2025_02_february.csv',
+                'data/weatherbit_2025_03_march.csv',
+                'data/weatherbit_2025_04_april.csv',
+                'data/weatherbit_2025_05_may.csv',
+                'data/weatherbit_2025_06_june.csv',
+                'data/weatherbit_2025_07_july.csv',
+                'data/weatherbit_2025_08_august.csv',
+                'data/weatherbit_2025_09_september.csv',
+                'data/weatherbit_2025_10_october.csv',
+                'data/weatherbit_2025_11_november.csv',
+                'data/weatherbit_2025_12_december.csv'
+            ];
+            const select = document.getElementById('chartCSV');
+            select.innerHTML = '';
+            csvFiles.forEach(f => {
+                const opt = document.createElement('option');
+                opt.value = f;
+                opt.textContent = f.replace('data/', '');
+                select.appendChild(opt);
+            });
+            select.value = 'data/openmeteo_2025_12_december.csv';
+        }
+
         async function loadChart() {
-            const month = document.getElementById('chartMonth').value;
+            const csvFile = document.getElementById('chartCSV').value;
             const param = document.getElementById('chartParameter').value;
             const ctx = document.getElementById('apiDataChart').getContext('2d');
             if (chartsInstances.apiChart) {
                 chartsInstances.apiChart.destroy();
             }
-            // Load CSV file for selected month and parameter
-            let csvFile = '';
-            if (month === '2025-12') csvFile = 'data/openmeteo_2025_12_december.csv';
-            else if (month === '2026-01') csvFile = 'data/openmeteo_2026_01_january.csv';
-            else if (month === '2026-02') csvFile = 'data/openmeteo_2026_02_february.csv';
-            else if (month === '2026-03') csvFile = 'data/openmeteo_2026_03_march.csv';
-            else if (month === '2026-04') csvFile = 'data/openmeteo_2026_04_april.csv';
-            else if (month === '2026-05') csvFile = 'data/openmeteo_2026_05_may.csv';
-            // Default to Dec 2025 if not found
-            if (!csvFile) csvFile = 'data/openmeteo_2025_12_december.csv';
             let data = [];
             let minValue = Infinity;
             let maxValue = -Infinity;
@@ -1330,10 +1371,11 @@
         }
 
         // Initialize on page load
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             initializeMLModels();
             initializeDailyFetch();
             updateDefaultData();  // Load default Open-Meteo data on start
+            await populateCSVFiles();
             loadChart();  // Load initial chart (API DATA Preview)
             generatePredictionResults();  // Generate initial prediction with ARI selected
             showAlert('SCADA System initialized. Solar energy data loaded. Daily data fetch scheduled. Ready for operation.', 'success');
