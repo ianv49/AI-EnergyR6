@@ -573,8 +573,8 @@
             </div>
 
             <div class="button-group">
-                <button class="scada-button" onclick="fetchData()">
-                    <i class="fas fa-sync"></i> FETCH DATA
+                <button class="scada-button" onclick="fetchNasaPowerUpdate()">
+                    <i class="fas fa-sync"></i> FETCH DATA (NASA)
                 </button>
                 <button class="scada-button secondary" onclick="validateData()">
                     <i class="fas fa-check"></i> VALIDATE
@@ -715,6 +715,7 @@
     <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <script src="fetch_nasa_power_update_web.js"></script>
     <script>
         // ML Models Configuration (10 Real Models - excluding SIM and NASA)
         const mlModels = [
