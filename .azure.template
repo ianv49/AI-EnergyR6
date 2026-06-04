@@ -19,3 +19,8 @@ AZURE_COSMOS_CONTAINER=energy-data
 NASA_API_KEY=
 WEATHERBIT_API_KEY=
 OPENMETEO_API_KEY=
+
+# Optional: Azure Key Vault name to fetch secrets instead of storing keys in .env
+# When set, the code will attempt to retrieve secrets named 'AZURE_STORAGE_KEY' and
+# 'AZURE_COSMOS_KEY' from the specified Key Vault using DefaultAzureCredential.
+AZURE_KEY_VAULT_NAME=

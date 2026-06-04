@@ -227,7 +227,7 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
 | Solar Energy Yield (kWh/m²/day) | DECIMAL(7,3) | Solar energy yield | Calculated |
 | Source | VARCHAR(50) | Data source identifier (open_meteo/nasa_power) | System |
 
-### Phase 10: Predictive Analytics ⏳ Ongoing
+### Phase 10: Predictive Analytics ✅ Done
 - Calculate averages/min/max/moving averages
 - Train ML model for forecasting (scikit-learn)
 - **ML Models Ranked for Wind/Solar Energy Time-Series Prediction:**
@@ -256,16 +256,90 @@ The `sensor_data` table stores web sensor data with the following 11 headers:
   - Evaluate models using MAE/RMSE on held-out test data.
   - Note: All libraries are open-source (scikit-learn, statsmodels, TensorFlow, PyTorch, Prophet).
 
-### Phase 11: Deployment & Scaling ⏳ Pending
-- **Containerize the Application:** Use Docker to package the Flask web application, ingestion scripts, and all dependencies into a portable container.
-- **Migrate to a Cloud Database:**
-    - **Choose a Cloud Provider:** Select a managed PostgreSQL service (e.g., Amazon RDS, Azure Database for PostgreSQL, Google Cloud SQL, or Supabase).
-    - **Use Supabase (Optional):** Supabase provides a hosted PostgreSQL database with a web UI and REST/API access. It can be used as a drop-in replacement for the local database.
-    - **Export and Import:** Export the schema and data from the local PostgreSQL database and import it into the new cloud-hosted instance.
-    - **Update Configuration:** Update the `.env` file with the new database credentials (host, port, user, password, database) for the cloud instance.
-- **Deploy to Cloud:** Deploy the containerized application to a cloud platform like AWS, Azure, GCP, or any container hosting service that supports Docker.
+### Phase 11: Deployment & Scaling ⏳ Ongoing
 
-## 🎛️ SCADA Control System Design
+#### 11.1 Cloud Storage Integration (NASA POWER - Azure Blob) ✅ In Progress
+- **Azure Blob Storage for Data Sync:**
+    - ✅ Implemented `nasa_power_azure_sync.py` module
+    - ✅ Automatic upload of nasa-api.txt and monthly CSVs after fetch
+    - ✅ Timestamp comparison between local and Azure (SYNCHRONIZED/LOCAL_AHEAD/AZURE_AHEAD status)
+    - ✅ New Flask endpoint: `/nasa-api-compare-timestamps` for sync status verification
+    - ✅ CORS support in Flask backend for cross-origin requests
+    - **Status:** Daily fetch from NASA POWER API → Automatic sync to Azure Blob Storage
+    - **Free Tier:** 5 GB blob storage on Azure free tier
+    - **Next Steps:** Monitor sync status via GUI dashboard; implement automated daily schedule
+
+#### 11.2 Cloud Database for Additional APIs ⏳ Planned
+- **Migrate to Azure Database Services for Multi-API Data Hub:**
+    - **NASA POWER Data** ✅ (Active ingestion + Azure Blob sync)
+        - Local File: data/nasa-api.txt + monthly CSVs
+        - Azure: Blob Storage
+        - Status: Real-time fetch with 5-second timeout to detect online data
+        - Last Update Metadata: Timestamp and row count tracked in nasa-api.txt
+    
+    - **Meteostat API Data** ⏳ (Cloud Database Planning)
+        - Local File: data/metstat-api.txt + meteostat_YYYY_MM_month.csv files
+        - Proposed Cloud Storage: Azure Cosmos DB or Blob Storage
+        - Planned Integration:
+            - Implement `meteostat_azure_sync.py` module (similar to NASA POWER)
+            - Fetch from Meteostat API (hourly historical data)
+            - Sync to Azure with timestamp comparison
+            - Update summary line: `# Summary: meteostat=<row_count>`
+            - Add last updated line: `# Data collection last updated: YYYY-MM-DD HH:MM:SS`
+        - Target Data Volume: ~9,438 rows (partial 2026 data available)
+        - Timeout: 3-5 seconds for online data detection
+    
+    - **Open-Meteo API Data** ⏳ (Cloud Database Planning)
+        - Local File: data/openmet-api.txt + openmeteo_YYYY_MM_month.csv files
+        - Proposed Cloud Storage: Azure Cosmos DB or Blob Storage
+        - Planned Integration:
+            - Implement `openmeteo_azure_sync.py` module
+            - Fetch from Open-Meteo API (hourly weather data, no API key required)
+            - Sync to Azure with timestamp comparison
+            - Update summary line: `# Summary: open_meteo=<row_count>`
+            - Add last updated line: `# Data collection last updated: YYYY-MM-DD HH:MM:SS`
+        - Target Data Volume: ~10,176 rows (complete 2025 data + ongoing 2026)
+        - Timeout: 3-5 seconds for online data detection
+    
+    - **WeatherBit API Data** ⏳ (Cloud Database Planning)
+        - Local File: data/weatherbit-api.txt + weatherbit_YYYY_MM_month.csv files
+        - Proposed Cloud Storage: Azure Cosmos DB or Blob Storage
+        - Planned Integration:
+            - Implement `weatherbit_azure_sync.py` module
+            - Fetch from WeatherBit API (hourly historical weather data)
+            - Sync to Azure with timestamp comparison
+            - Update summary line: `# Summary: weatherbit=<row_count>`
+            - Add last updated line: `# Data collection last updated: YYYY-MM-DD HH:MM:SS`
+        - Target Data Volume: ~743 rows (2025 historical data integrated)
+        - Timeout: 3-5 seconds for online data detection
+
+#### 11.3 Containerization ⏳ Planned
+- **Containerize the Application:** Use Docker to package the Flask web application, ingestion scripts, and all dependencies into a portable container.
+- **Container Scope:**
+    - Flask backend (nasa_api_server.py with CORS support)
+    - NASA POWER fetch script (fetch_nasa_power_update.py)
+    - Azure sync modules (nasa_power_azure_sync.py, meteostat_azure_sync.py, openmeteo_azure_sync.py, weatherbit_azure_sync.py)
+    - All API ingestion routines
+
+#### 11.4 Centralized Cloud Database ⏳ Planned
+- **Migrate Local PostgreSQL to Azure:**
+    - **Choose Azure Service:** Azure Database for PostgreSQL (managed service) or Azure Cosmos DB for NoSQL flexibility
+    - **Data Migration Strategy:**
+        - Export local PostgreSQL database schema and historical data
+        - Import into Azure managed database
+        - Update connection strings in `.env` file
+    - **Multi-Source Data Hub:**
+        - Consolidate NASA POWER, Meteostat, Open-Meteo, and WeatherBit data into single cloud database
+        - Maintain local files as backup/cache layer
+        - Cloud as single source of truth for historical data
+
+#### 11.5 Deploy to Cloud ⏳ Planned
+- **Deploy Containerized Application:** Deploy Docker container to Azure Container Instances or Azure App Service
+- **Connect to Cloud Database:** Link containerized app to Azure managed database
+- **Enable Multi-API Sync:** Automated daily sync for all four APIs (NASA POWER, Meteostat, Open-Meteo, WeatherBit)
+- **Monitor and Scale:** Set up Azure monitoring and auto-scaling policies
+
+### Phase 12:🎛️ SCADA Control System Design
   Sequence Numbering
   [1] DATA ACQUISITION CONTROL
   [2] API DATA ANALYSIS

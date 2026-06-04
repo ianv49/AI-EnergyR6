@@ -6,6 +6,8 @@ Handles Azure credentials, Blob Storage setup, and Cosmos DB configuration
 
 from azure.storage.blob import BlobServiceClient
 from azure.cosmos import CosmosClient
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
 import os
 import json
 from pathlib import Path
@@ -26,7 +28,8 @@ class AzureConfig:
         self.region = region
         self.storage_account = os.getenv('AZURE_STORAGE_ACCOUNT')
         self.storage_key = os.getenv('AZURE_STORAGE_KEY')
-        self.blob_container = os.getenv('AZURE_BLOB_CONTAINER', 'ai-energy-r6-data')
+        # Support both AZURE_STORAGE_CONTAINER (template) and AZURE_BLOB_CONTAINER (legacy)
+        self.blob_container = os.getenv('AZURE_STORAGE_CONTAINER', os.getenv('AZURE_BLOB_CONTAINER', 'ai-energy-r6-data'))
         self.cosmos_endpoint = os.getenv('AZURE_COSMOS_ENDPOINT')
         self.cosmos_key = os.getenv('AZURE_COSMOS_KEY')
         self.cosmos_database = os.getenv('AZURE_COSMOS_DATABASE', 'energy_db')
@@ -36,26 +39,71 @@ class AzureConfig:
         self._initialize_clients()
     
     def _validate_credentials(self):
-        """Validate Azure credentials are available"""
-        if not self.storage_account or not self.storage_key:
+        """Validate Azure credentials are available
+
+        Storage: require storage account but allow either a storage key or
+        a managed identity / DefaultAzureCredential to be used at runtime.
+        Cosmos DB: still requires endpoint and key for current code paths.
+        """
+        if not self.storage_account:
             raise ValueError(
-                "Azure Storage credentials not found. Please set AZURE_STORAGE_ACCOUNT and "
-                "AZURE_STORAGE_KEY environment variables or in .env.azure file"
+                "Azure Storage account not found. Please set AZURE_STORAGE_ACCOUNT in .env.azure or env"
             )
+
+        # If storage_key is not provided in env, attempt to retrieve it from Key Vault
+        if not self.storage_key:
+            key_vault_name = os.getenv('AZURE_KEY_VAULT_NAME')
+            if key_vault_name:
+                secret = self._fetch_secret_from_keyvault(key_vault_name, 'AZURE_STORAGE_KEY')
+                if secret:
+                    self.storage_key = secret
+
+        # Cosmos DB still requires explicit key in current codepaths; try Key Vault if not provided
+        if not self.cosmos_endpoint or not self.cosmos_key:
+            # Attempt to retrieve cosmos key from Key Vault if configured
+            key_vault_name = os.getenv('AZURE_KEY_VAULT_NAME')
+            if key_vault_name and not self.cosmos_key:
+                secret = self._fetch_secret_from_keyvault(key_vault_name, 'AZURE_COSMOS_KEY')
+                if secret:
+                    self.cosmos_key = secret
+
         if not self.cosmos_endpoint or not self.cosmos_key:
             raise ValueError(
                 "Azure Cosmos DB credentials not found. Please set AZURE_COSMOS_ENDPOINT and "
-                "AZURE_COSMOS_KEY environment variables or in .env.azure file"
+                "AZURE_COSMOS_KEY environment variables or configure Key Vault with these secrets"
             )
         print(f"✓ Azure credentials validated")
+
+    def _fetch_secret_from_keyvault(self, key_vault_name, secret_name):
+        """Fetch a secret value from Azure Key Vault using DefaultAzureCredential.
+
+        Returns the secret value as a string, or None on failure.
+        """
+        try:
+            vault_url = f"https://{key_vault_name}.vault.azure.net"
+            credential = DefaultAzureCredential()
+            client = SecretClient(vault_url=vault_url, credential=credential)
+            secret = client.get_secret(secret_name)
+            if secret and secret.value:
+                print(f"✓ Retrieved secret '{secret_name}' from Key Vault: {key_vault_name}")
+                return secret.value
+        except Exception as e:
+            print(f"⚠ Unable to retrieve secret '{secret_name}' from Key Vault '{key_vault_name}': {e}")
+        return None
     
     def _initialize_clients(self):
         """Initialize Azure service clients"""
         try:
-            # Initialize Blob Storage client
+            # Initialize Blob Storage client. Prefer explicit storage key if provided,
+            # otherwise fall back to DefaultAzureCredential (managed identity / environment).
+            if self.storage_key:
+                blob_credential = self.storage_key
+            else:
+                blob_credential = DefaultAzureCredential()
+
             self.blob_client = BlobServiceClient(
                 account_url=f"https://{self.storage_account}.blob.core.windows.net",
-                credential=self.storage_key
+                credential=blob_credential
             )
             
             # Initialize Cosmos DB client

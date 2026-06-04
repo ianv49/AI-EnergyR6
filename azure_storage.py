@@ -5,6 +5,8 @@ Handles uploading, downloading, and managing files in Azure Blob Storage
 """
 
 import os
+import time
+import functools
 from pathlib import Path
 from datetime import datetime
 from azure_config import AzureConfig
@@ -23,6 +25,29 @@ class AzureStorage:
         self.blob_client = self.config.get_blob_client()
         self.container_client = self.config.get_blob_container_client()
         self.container_name = self.config.get_container_name()
+
+    def _retry(self, max_attempts=3, initial_delay=1.0, backoff=2.0, allowed_exceptions=(Exception,)):
+        """Return a decorator that retries the wrapped function with exponential backoff."""
+        def decorator(func):
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                delay = initial_delay
+                last_exc = None
+                for attempt in range(1, max_attempts + 1):
+                    try:
+                        return func(*args, **kwargs)
+                    except allowed_exceptions as e:
+                        last_exc = e
+                        if attempt == max_attempts:
+                            raise
+                        print(f"⚠ Retry {attempt}/{max_attempts} for {func.__name__} failed: {e}; retrying in {delay}s")
+                        time.sleep(delay)
+                        delay *= backoff
+                # If we exit loop without returning, re-raise last exception
+                if last_exc:
+                    raise last_exc
+            return wrapper
+        return decorator
     
     def upload_file(self, local_path, blob_name=None, metadata=None):
         """Upload a file to Blob Storage
@@ -35,17 +60,22 @@ class AzureStorage:
         Returns:
             bool: True if successful
         """
-        try:
+        @self._retry(max_attempts=4, initial_delay=1.0, backoff=2.0)
+        def _do_upload(local_path, blob_name, metadata):
             local_path = Path(local_path)
             if not local_path.exists():
                 raise FileNotFoundError(f"File not found: {local_path}")
-            
+
             blob_name = blob_name or str(local_path.name)
-            
+
             with open(local_path, "rb") as data:
                 self.container_client.upload_blob(blob_name, data, overwrite=True)
-            
-            print(f"✓ Uploaded: {local_path.name} → {self.container_name}/{blob_name}")
+
+            return blob_name
+
+        try:
+            uploaded_blob = _do_upload(local_path, blob_name, metadata)
+            print(f"✓ Uploaded: {Path(local_path).name} → {self.container_name}/{uploaded_blob}")
             return True
         except Exception as e:
             print(f"✗ Upload failed for {local_path}: {str(e)}")
@@ -84,15 +114,23 @@ class AzureStorage:
         Returns:
             bool: True if successful
         """
-        try:
+        @self._retry(max_attempts=4, initial_delay=1.0, backoff=2.0)
+        def _do_download(blob_name, local_path):
             local_path = Path(local_path or Path(blob_name).name)
             local_path.parent.mkdir(parents=True, exist_ok=True)
-            
+
             blob_client = self.container_client.get_blob_client(blob_name)
+            # Stream download to avoid large memory spikes
+            stream = blob_client.download_blob()
             with open(local_path, "wb") as file_stream:
-                file_stream.write(blob_client.download_blob().readall())
-            
-            print(f"✓ Downloaded: {self.container_name}/{blob_name} → {local_path}")
+                for chunk in stream.chunks():
+                    file_stream.write(chunk)
+
+            return local_path
+
+        try:
+            saved_path = _do_download(blob_name, local_path)
+            print(f"✓ Downloaded: {self.container_name}/{blob_name} → {saved_path}")
             return True
         except Exception as e:
             print(f"✗ Download failed for {blob_name}: {str(e)}")
@@ -108,10 +146,11 @@ class AzureStorage:
         Returns:
             list: List of blob information
         """
-        try:
+        @self._retry(max_attempts=3, initial_delay=0.5, backoff=2.0)
+        def _do_list(prefix, recursive):
             files = []
             blobs = self.container_client.list_blobs(name_starts_with=prefix)
-            
+
             for blob in blobs:
                 if recursive or '/' not in blob.name.replace(prefix, ''):
                     files.append({
@@ -119,8 +158,11 @@ class AzureStorage:
                         'size': blob.size,
                         'modified': blob.last_modified
                     })
-            
+
             return files
+
+        try:
+            return _do_list(prefix, recursive)
         except Exception as e:
             print(f"✗ Failed to list files: {str(e)}")
             return []
@@ -134,8 +176,13 @@ class AzureStorage:
         Returns:
             bool: True if successful
         """
-        try:
+        @self._retry(max_attempts=3, initial_delay=0.5, backoff=2.0)
+        def _do_delete(blob_name):
             self.container_client.delete_blob(blob_name)
+            return True
+
+        try:
+            _do_delete(blob_name)
             print(f"✓ Deleted: {self.container_name}/{blob_name}")
             return True
         except Exception as e:
@@ -167,7 +214,9 @@ class AzureStorage:
             str: File URL
         """
         try:
-            return f"https://{self.container_name}.blob.core.windows.net/{blob_name}"
+            # Use the blob client's URL which includes account, container and blob path
+            blob_client = self.container_client.get_blob_client(blob_name)
+            return blob_client.url
         except Exception as e:
             print(f"✗ Failed to generate URL: {str(e)}")
             return None
