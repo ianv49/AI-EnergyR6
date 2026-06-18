@@ -106,8 +106,18 @@ class AzureConfig:
                 credential=blob_credential
             )
             
-            # Initialize Cosmos DB client
-            self.cosmos_client = CosmosClient(self.cosmos_endpoint, self.cosmos_key)
+            # Initialize Cosmos DB client. Prefer explicit key if provided,
+            # otherwise use DefaultAzureCredential (AAD) for token-based auth.
+            if self.cosmos_key:
+                self.cosmos_client = CosmosClient(self.cosmos_endpoint, self.cosmos_key)
+            else:
+                try:
+                    aad_cred = DefaultAzureCredential()
+                    # CosmosClient accepts a token credential via 'credential' kwarg
+                    self.cosmos_client = CosmosClient(self.cosmos_endpoint, credential=aad_cred)
+                    print("✓ Using AAD (DefaultAzureCredential) for Cosmos DB authentication")
+                except Exception as e:
+                    raise RuntimeError(f"Failed to initialize Cosmos client with AAD: {e}")
             
             # Get database and container references
             self.cosmos_database_client = self.cosmos_client.get_database_client(self.cosmos_database)
